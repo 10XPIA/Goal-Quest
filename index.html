@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GoalQuest — 인생 레벨업</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --bg: #080816;
@@ -13,8 +13,8 @@
   --border: #252550;
   --text: #e2e8f0;
   --text-dim: #7080a0;
-  --pixel: 'Press Start 2P', monospace;
-  --body: 'Nanum Gothic', sans-serif;
+  --pixel: "Courier New", "Lucida Console", monospace;
+  --body: 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', 'Noto Sans KR', sans-serif;
   --gold: #f5c842;
   --gold2: #ffaa00;
 }
@@ -150,10 +150,11 @@ body {
 
 <div class="modal-overlay" id="expModal">
   <div class="modal">
-    <div class="modal-title">⚡ EXP UP</div>
+    <div class="modal-title" id="modalTitle">⚡ EXP UP</div>
     <div class="modal-sub" id="modalQuestName"></div>
+    <div id="modalModeNote" style="display:none;font-size:11px;color:#facc15;background:rgba(250,204,21,0.08);border:1px solid rgba(250,204,21,0.2);border-radius:6px;padding:7px 10px;margin-bottom:14px;text-align:center;"></div>
     <div class="field-wrap">
-      <label class="field-label">추가할 경험치</label>
+      <label class="field-label" id="expLabel">추가할 경험치</label>
       <input type="number" id="expInput" min="1" placeholder="1" />
     </div>
     <div class="field-wrap">
@@ -317,7 +318,7 @@ function renderQuests(){
         <button class="btn-del" onclick="delQuest(${q.id})">✕</button>
       </div><div class="quest-row">
         <div class="quest-bar-wrap"><div class="quest-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${meta.color}88,${meta.color})"></div></div>
-        <button class="exp-up-btn" onclick="openModal(${q.id})" style="border-color:${meta.color}55;color:${meta.color}">EXP UP</button>
+        <button class="exp-up-btn" onclick="openModal(${q.id})" style="border-color:${meta.color}55;color:${meta.color}">${getTodayLog(q)?'✏️ 수정':'EXP UP'}</button>
       </div>${logs?`<div class="log-area">${logs}</div>`:''}</div>`;
     }).join('');
     return `<div class="cat-section" style="margin-bottom:12px"><div class="cat-header" onclick="toggleQuestCat('${key}')">
@@ -343,28 +344,65 @@ function delQuest(id){
   if(!confirm('이 퀘스트를 삭제할까요?'))return;
   state.quests=state.quests.filter(q=>q.id!==id);save();renderQuests();
 }
+function todayStr(){return new Date().toLocaleDateString('ko-KR',{month:'short',day:'numeric'});}
+function getTodayLog(q){return q.logs.find(l=>l.date===todayStr())||null;}
+
 function openModal(id){
   activeQuestId=id;
   const q=state.quests.find(x=>x.id===id);
   const meta=CAT_META[q.cat];
+  const todayLog=getTodayLog(q);
   document.getElementById('modalQuestName').textContent=`${meta.label} — ${q.name}`;
-  document.getElementById('expInput').value='';
-  document.getElementById('memoInput').value='';
+
+  if(todayLog){
+    // 수정 모드
+    document.getElementById('modalTitle').textContent='✏️ 오늘 기록 수정';
+    document.getElementById('modalModeNote').textContent=`오늘 기록: +${todayLog.exp} EXP / "${todayLog.memo}"`;
+    document.getElementById('modalModeNote').style.display='block';
+    document.getElementById('expLabel').textContent='오늘 총 경험치 (수정)';
+    document.getElementById('expInput').value=todayLog.exp;
+    document.getElementById('memoInput').value=todayLog.memo==='기록 없음'?'':todayLog.memo;
+  } else {
+    // 신규 입력 모드
+    document.getElementById('modalTitle').textContent='⚡ EXP UP';
+    document.getElementById('modalModeNote').style.display='none';
+    document.getElementById('expLabel').textContent='추가할 경험치';
+    document.getElementById('expInput').value='';
+    document.getElementById('memoInput').value='';
+  }
   document.getElementById('expModal').classList.add('open');
   setTimeout(()=>document.getElementById('expInput').focus(),80);
 }
 function closeModal(){document.getElementById('expModal').classList.remove('open');activeQuestId=null;}
 
 function confirmExp(){
-  const expAdd=parseInt(document.getElementById('expInput').value)||0;
+  const newExp=parseInt(document.getElementById('expInput').value)||0;
   const memo=document.getElementById('memoInput').value.trim()||'기록 없음';
-  if(expAdd<=0){alert('경험치는 1 이상이어야 해요!');return;}
+  if(newExp<=0){alert('경험치는 1 이상이어야 해요!');return;}
   const q=state.quests.find(x=>x.id===activeQuestId);
   const meta=CAT_META[q.cat];
-  q.exp+=expAdd;
-  const today=new Date().toLocaleDateString('ko-KR',{month:'short',day:'numeric'});
-  q.logs.unshift({date:today,exp:expAdd,memo});
-  if(q.logs.length>5)q.logs.pop();
+  const today=todayStr();
+  const todayLog=getTodayLog(q);
+
+  if(todayLog){
+    // 수정 모드: 차이만큼만 경험치 반영
+    const diff=newExp-todayLog.exp;
+    if(diff===0&&memo===todayLog.memo){closeModal();return;}
+    todayLog.exp=newExp;
+    todayLog.memo=memo;
+    if(diff>0){
+      q.exp+=diff;
+    } else if(diff<0){
+      // 경험치 감소: 현재 exp에서 빼기 (레벨 역행은 없음, 0 이하면 0)
+      q.exp=Math.max(0,q.exp+diff);
+    }
+  } else {
+    // 신규 입력
+    q.exp+=newExp;
+    q.logs.unshift({date:today,exp:newExp,memo});
+    if(q.logs.length>5)q.logs.pop();
+  }
+
   while(q.exp>=expForLv(q.lv)){
     q.exp-=expForLv(q.lv);
     const prevLv=q.lv;q.lv++;
