@@ -3,164 +3,259 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GoalQuest — 인생 레벨업</title>
+<title>GoalQuest v0.12</title>
 <style>
 :root{
-  --bg:#080816;--panel:#10102a;--panel2:#181836;--border:#252550;
-  --text:#e2e8f0;--text-dim:#7080a0;--gold:#f5c842;--gold2:#ffaa00;
+  --bg:#0a0818;--panel:rgba(20,18,45,0.92);--panel2:#181836;--border:#2a2858;
+  --text:#e8eaf6;--text-dim:#8090b8;--gold:#f5c842;--gold2:#ffaa00;
   --pixel:"Courier New","Lucida Console",monospace;
   --body:'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;
-  background-image:radial-gradient(ellipse at 15% 40%,rgba(239,68,68,.04) 0%,transparent 55%),
-  radial-gradient(ellipse at 85% 20%,rgba(96,165,250,.04) 0%,transparent 55%),
-  radial-gradient(ellipse at 50% 90%,rgba(245,200,66,.04) 0%,transparent 55%);}
-.wrap{max-width:860px;margin:0 auto;padding:16px 12px 80px;}
-.header{text-align:center;padding:20px 0 16px;}
-.header h1{font-family:var(--pixel);font-size:16px;color:var(--gold);text-shadow:0 0 24px rgba(245,200,66,.7);letter-spacing:2px;margin-bottom:4px;}
-.header .sub{font-size:11px;color:var(--text-dim);letter-spacing:3px;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(8,8,22,.95);border-top:1px solid var(--border);display:flex;z-index:50;}
-.nav-btn{flex:1;padding:12px 4px 10px;background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-family:var(--body);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .15s;}
+
+/* ── BACKGROUND ── */
+body{
+  color:var(--text);font-family:var(--body);min-height:100vh;
+  background:
+    radial-gradient(ellipse at 20% 0%,rgba(120,60,200,0.35) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 0%,rgba(60,80,200,0.25) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 100%,rgba(80,30,150,0.2) 0%,transparent 60%),
+    linear-gradient(160deg,#0d0b20 0%,#120f2e 40%,#0f0d28 70%,#0a0818 100%);
+  position:relative;
+}
+/* Star field */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:
+    radial-gradient(1px 1px at 8% 12%,rgba(255,255,255,0.6) 0%,transparent 100%),
+    radial-gradient(1px 1px at 18% 35%,rgba(255,255,255,0.4) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 28% 8%,rgba(255,255,255,0.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 38% 55%,rgba(255,255,255,0.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 48% 20%,rgba(255,255,255,0.5) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 58% 42%,rgba(255,255,255,0.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 68% 15%,rgba(255,255,255,0.6) 0%,transparent 100%),
+    radial-gradient(1px 1px at 78% 68%,rgba(255,255,255,0.3) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 88% 30%,rgba(255,255,255,0.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 95% 55%,rgba(255,255,255,0.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 5% 75%,rgba(255,255,255,0.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 22% 85%,rgba(255,255,255,0.4) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 42% 78%,rgba(255,255,255,0.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 62% 90%,rgba(255,255,255,0.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 82% 82%,rgba(255,255,255,0.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 33% 48%,rgba(180,160,255,0.4) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 72% 22%,rgba(160,180,255,0.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 55% 65%,rgba(200,160,255,0.3) 0%,transparent 100%);
+  pointer-events:none;
+}
+/* Nebula glow */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 15% 25%,rgba(100,60,200,0.08) 0%,transparent 40%),
+    radial-gradient(ellipse at 85% 60%,rgba(60,100,200,0.06) 0%,transparent 40%),
+    radial-gradient(ellipse at 50% 80%,rgba(80,40,160,0.06) 0%,transparent 35%);
+  pointer-events:none;
+}
+
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:16px 12px 80px;}
+
+/* ── HEADER ── */
+.header{text-align:center;padding:16px 0 14px;}
+.header h1{font-family:var(--pixel);font-size:15px;color:var(--gold);text-shadow:0 0 20px rgba(245,200,66,.8),0 0 40px rgba(245,200,66,.3);letter-spacing:2px;margin-bottom:3px;}
+.header .sub{font-size:12px;color:var(--text-dim);letter-spacing:2px;margin-bottom:2px;}
+.ver-badge{display:inline-block;font-family:var(--pixel);font-size:7px;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.1);padding:2px 6px;border-radius:3px;margin-top:2px;}
+
+/* ── NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(8,6,24,.97);border-top:1px solid var(--border);display:flex;z-index:50;backdrop-filter:blur(10px);}
+.nav-btn{flex:1;padding:11px 4px 9px;background:transparent;border:none;color:var(--text-dim);cursor:pointer;font-family:var(--body);font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .15s;}
 .nav-btn .nav-icon{font-size:18px;}
 .nav-btn.active{color:var(--gold);}
 .page{display:none;}.page.active{display:block;}
 
-/* DASHBOARD */
-.dashboard-grid{display:grid;grid-template-columns:1fr 140px 1fr;gap:10px;align-items:center;margin-bottom:16px;}
-.cat-col{display:flex;flex-direction:column;gap:8px;}
-.cat-mini-card{background:var(--panel);border:2px solid var(--border);border-radius:10px;padding:10px 12px;transition:border-color .3s,background .3s,box-shadow .3s;}
-.cat-mini-card.done-today{border-width:2px;}
-.cat-mini-top{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
-.cat-mini-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.cat-mini-name{font-weight:800;font-size:12px;flex:1;}
-.cat-mini-lv{font-family:var(--pixel);font-size:8px;font-weight:bold;}
-.cat-mini-bar-wrap{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
-.cat-mini-bar-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.34,1.3,.64,1);}
+/* ── DASHBOARD GRID ── */
+.dashboard-grid{display:grid;grid-template-columns:1fr 130px 1fr;gap:8px;align-items:center;margin-bottom:14px;}
+.cat-col{display:flex;flex-direction:column;gap:7px;}
 
-/* LIFE CENTER */
-.life-center{display:flex;flex-direction:column;align-items:center;gap:6px;background:linear-gradient(135deg,#14142e,#1e1e42);border:1px solid rgba(245,200,66,.3);border-radius:14px;padding:14px 10px;position:relative;overflow:hidden;}
+/* ── CAT MINI CARD ── */
+.cat-mini-card{
+  background:var(--panel);border:1.5px solid var(--border);
+  border-radius:10px;padding:9px 11px;
+  transition:border-color .3s,background .3s,box-shadow .3s;
+}
+.cat-mini-card.partial{border-color:rgba(255,255,255,.35);border-width:2.5px;box-shadow:0 0 10px rgba(255,255,255,.1);}
+.cat-mini-card.full-done{border-width:2.5px;}
+.cat-mini-top{display:flex;align-items:center;gap:5px;margin-bottom:6px;}
+.cat-mini-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.cat-mini-name{font-weight:800;font-size:11px;flex:1;}
+.cat-mini-lv{font-family:var(--pixel);font-size:7px;font-weight:bold;}
+/* Quest dots */
+.quest-dots{display:flex;gap:4px;flex-wrap:wrap;}
+.quest-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid;}
+.quest-dot.done{border-width:0;}
+
+/* ── LIFE CENTER ── */
+.life-center{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  background:linear-gradient(135deg,rgba(20,18,50,.9),rgba(28,24,60,.9));
+  border:1px solid rgba(245,200,66,.35);border-radius:14px;padding:12px 8px;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 30px rgba(245,200,66,.08);
+}
 .life-center::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
-.knight-wrap{width:96px;height:96px;image-rendering:pixelated;}
+.knight-wrap{width:88px;height:88px;image-rendering:pixelated;}
 .knight-wrap svg{width:100%;height:100%;image-rendering:pixelated;}
-.life-lv-txt{font-family:var(--pixel);font-size:10px;color:var(--gold);text-shadow:0 0 10px rgba(245,200,66,.6);}
-.life-title-txt{font-size:9px;color:var(--gold2);font-weight:700;text-align:center;}
+.life-lv-txt{font-family:var(--pixel);font-size:10px;color:var(--gold);text-shadow:0 0 10px rgba(245,200,66,.7);}
+.life-title-txt{font-size:9px;color:var(--gold2);font-weight:700;text-align:center;line-height:1.3;}
 .life-exp-txt{font-family:var(--pixel);font-size:6px;color:var(--text-dim);}
-.life-bar-w{width:100%;height:10px;background:rgba(255,255,255,.05);border-radius:5px;border:1px solid rgba(245,200,66,.2);overflow:hidden;}
-.life-bar-f{height:100%;background:linear-gradient(90deg,#c97c00,var(--gold),#ffe080);border-radius:5px;transition:width .8s cubic-bezier(.34,1.3,.64,1);}
+.life-bar-w{width:100%;height:8px;background:rgba(255,255,255,.05);border-radius:4px;border:1px solid rgba(245,200,66,.2);overflow:hidden;}
+.life-bar-f{height:100%;background:linear-gradient(90deg,#c97c00,var(--gold),#ffe080);border-radius:4px;transition:width .8s cubic-bezier(.34,1.3,.64,1);}
 
-/* SECTION HD */
-.section-hd{font-family:var(--pixel);font-size:7px;color:var(--text-dim);margin:16px 0 8px;letter-spacing:1px;display:flex;align-items:center;gap:10px;}
+/* ── SECTION HD ── */
+.section-hd{font-family:var(--pixel);font-size:7px;color:var(--text-dim);margin:14px 0 7px;letter-spacing:1px;display:flex;align-items:center;gap:10px;}
 .section-hd::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* QUEST SECTIONS */
-.cat-section{background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
-.cat-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;user-select:none;transition:background .15s;}
+/* ── QUEST SECTION ── */
+.cat-section{background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:9px;overflow:hidden;backdrop-filter:blur(4px);}
+.cat-header{display:flex;align-items:center;gap:8px;padding:11px 13px;cursor:pointer;user-select:none;transition:background .15s;}
 .cat-header:hover{background:rgba(255,255,255,.02);}
-.cat-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .cat-h-name{font-weight:800;font-size:13px;flex:1;}
-.cat-h-lv{font-family:var(--pixel);font-size:8px;padding:2px 7px;border-radius:3px;border:1px solid;font-weight:bold;}
+.cat-h-lv{font-family:var(--pixel);font-size:8px;padding:2px 7px;border-radius:3px;border:1px solid;font-weight:bold;white-space:nowrap;}
+/* EXP bar in cat header */
+.cat-h-bar-wrap{flex:1;height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;max-width:80px;}
+.cat-h-bar-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.34,1.3,.64,1);}
 .cat-toggle{color:var(--text-dim);font-size:11px;flex-shrink:0;transition:transform .2s;}
 .cat-toggle.open{transform:rotate(180deg);}
 .cat-body{padding:0 10px 10px;}
 
-/* QUEST CARD */
-.quest-card{background:rgba(255,255,255,.02);border:2px solid var(--border);border-radius:10px;padding:10px 12px;margin-top:7px;transition:border-color .3s,box-shadow .3s,background .3s;}
-.quest-card:hover{border-color:rgba(255,255,255,.1);}
-.quest-card.done-today{border-width:2px;}
-.quest-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
+/* ── QUEST CARD ── */
+.quest-card{background:rgba(255,255,255,.025);border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;margin-top:7px;transition:border-color .3s,box-shadow .3s,background .3s;}
+.quest-card.done-today{border-width:2.5px;}
+.quest-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
 .quest-name-wrap{flex:1;min-width:0;}
-.quest-name{font-weight:800;font-size:13px;display:block;margin-bottom:3px;}
+.quest-name{font-weight:800;font-size:14px;display:block;margin-bottom:3px;}
 .quest-lv-big{font-family:var(--pixel);font-size:12px;font-weight:bold;}
 .quest-row{display:flex;align-items:center;gap:8px;}
 .quest-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.05);border-radius:4px;border:1px solid var(--border);overflow:hidden;}
 .quest-bar-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.34,1.3,.64,1);position:relative;}
 .quest-bar-fill::after{content:'';position:absolute;top:1px;left:3px;right:3px;height:2px;background:rgba(255,255,255,.3);border-radius:2px;}
-.exp-up-btn{font-family:var(--pixel);font-size:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:var(--text);padding:6px 7px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:background .15s,transform .1s;}
-.exp-up-btn:hover{background:rgba(255,255,255,.12);transform:scale(1.05);}
-.log-area{margin-top:6px;display:flex;flex-direction:column;gap:3px;}
-.log-entry{font-size:11px;color:var(--text-dim);background:rgba(255,255,255,.02);border-left:2px solid;padding:3px 7px;border-radius:0 4px 4px 0;display:flex;gap:8px;align-items:center;}
-.log-exp{font-family:var(--pixel);font-size:6px;white-space:nowrap;}
-.add-quest-row{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;}
-.add-quest-row input{flex:1;min-width:100px;background:rgba(255,255,255,.04);border:1px dashed var(--border);border-radius:7px;color:var(--text);font-family:var(--body);font-size:12px;padding:6px 9px;outline:none;}
-.add-quest-row input:focus{border-color:rgba(255,255,255,.2);}
-.btn-add-quest{font-family:var(--pixel);font-size:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:var(--text);padding:6px 9px;border-radius:7px;cursor:pointer;}
-.btn-del{background:transparent;border:none;color:rgba(255,255,255,.2);cursor:pointer;font-size:12px;padding:2px 3px;line-height:1;transition:color .15s;flex-shrink:0;}
-.btn-del:hover{color:#ef4444;}
-.btn-preset-edit{background:transparent;border:none;color:rgba(255,255,255,.2);cursor:pointer;font-size:12px;padding:2px 3px;line-height:1;transition:color .15s;flex-shrink:0;}
-.btn-preset-edit:hover{color:var(--gold);}
 
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);z-index:100;justify-content:center;align-items:center;padding:16px;}
+/* BIG EXP UP BUTTON */
+.exp-up-btn{
+  font-family:var(--pixel);font-size:7px;
+  padding:9px 12px;border-radius:8px;cursor:pointer;white-space:nowrap;
+  transition:transform .1s,box-shadow .15s;
+  border:none;font-weight:bold;
+}
+.exp-up-btn:hover{transform:scale(1.06);}
+.exp-up-btn:active{transform:scale(.97);}
+
+.log-area{margin-top:7px;display:flex;flex-direction:column;gap:3px;}
+.log-entry{font-size:12px;color:var(--text-dim);background:rgba(255,255,255,.02);border-left:2px solid;padding:4px 8px;border-radius:0 4px 4px 0;display:flex;gap:8px;align-items:center;}
+.log-exp{font-family:var(--pixel);font-size:7px;white-space:nowrap;}
+.add-quest-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.add-quest-row input{flex:1;min-width:100px;background:rgba(255,255,255,.04);border:1px dashed var(--border);border-radius:7px;color:var(--text);font-family:var(--body);font-size:13px;padding:7px 10px;outline:none;}
+.add-quest-row input:focus{border-color:rgba(255,255,255,.25);}
+.btn-add-quest{font-family:var(--pixel);font-size:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:var(--text);padding:7px 10px;border-radius:7px;cursor:pointer;}
+.btn-settings{background:transparent;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;padding:2px 4px;line-height:1;transition:color .15s;flex-shrink:0;}
+.btn-settings:hover{color:var(--gold);}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:100;justify-content:center;align-items:center;padding:16px;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--panel2);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:22px 20px;width:100%;max-width:400px;animation:pop .2s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto;}
+.modal{background:rgba(18,16,42,.98);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:22px 20px;width:100%;max-width:400px;animation:pop .2s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);}
 @keyframes pop{from{transform:scale(.85);opacity:0;}to{transform:scale(1);opacity:1;}}
-.modal-title{font-family:var(--pixel);font-size:8px;color:var(--gold);margin-bottom:4px;text-align:center;}
-.modal-sub{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:14px;font-weight:700;}
+.modal-title{font-family:var(--pixel);font-size:11px;color:var(--gold);margin-bottom:4px;text-align:center;}
+.modal-sub{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:14px;font-weight:700;}
 .field-wrap{margin-bottom:12px;}
-.field-label{font-family:var(--pixel);font-size:6px;color:var(--text-dim);margin-bottom:4px;display:block;}
-.modal input,.modal textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--body);font-size:14px;padding:8px 11px;outline:none;transition:border-color .2s;}
-.modal input:focus,.modal textarea:focus{border-color:rgba(255,255,255,.3);}
-.modal input[type=number]{font-family:var(--pixel);font-size:18px;text-align:center;}
-.modal textarea{resize:none;height:60px;}
+.field-label{font-family:var(--pixel);font-size:6px;color:var(--text-dim);margin-bottom:5px;display:block;}
+.modal input,.modal textarea{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--body);font-size:14px;padding:9px 12px;outline:none;transition:border-color .2s;}
+.modal input:focus,.modal textarea:focus{border-color:rgba(255,255,255,.35);}
+.modal input[type=number]{font-family:var(--pixel);font-size:20px;text-align:center;}
+.modal textarea{resize:none;height:62px;}
 .modal-btns{display:flex;gap:8px;margin-top:14px;}
-.btn-confirm{flex:1;font-family:var(--pixel);font-size:7px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;padding:12px;border-radius:8px;cursor:pointer;box-shadow:0 4px 14px rgba(124,58,237,.4);transition:transform .1s;}
+.btn-confirm{flex:1;font-family:var(--pixel);font-size:7px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;padding:13px;border-radius:8px;cursor:pointer;box-shadow:0 4px 14px rgba(124,58,237,.4);transition:transform .1s;}
 .btn-confirm:hover{transform:translateY(-2px);}
-.btn-cancel{font-family:var(--pixel);font-size:7px;background:transparent;color:var(--text-dim);border:1px solid var(--border);padding:12px 14px;border-radius:8px;cursor:pointer;}
+.btn-cancel{font-family:var(--pixel);font-size:7px;background:transparent;color:var(--text-dim);border:1px solid var(--border);padding:13px 15px;border-radius:8px;cursor:pointer;}
+.modal-close-x{position:absolute;top:14px;right:16px;background:transparent;border:none;color:var(--text-dim);font-size:22px;cursor:pointer;line-height:1;padding:4px;transition:color .15s;}
+.modal-close-x:hover{color:var(--text);}
+.modal{position:relative;}
+.btn-delete-quest{width:100%;margin-top:10px;font-family:var(--pixel);font-size:7px;background:transparent;color:#ef4444;border:1px solid rgba(239,68,68,.4);padding:11px;border-radius:8px;cursor:pointer;transition:background .15s;}
+.btn-delete-quest:hover{background:rgba(239,68,68,.1);}
 .preset-btns{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
-.preset-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:var(--text);padding:9px 12px;cursor:pointer;text-align:left;font-family:var(--body);font-size:13px;transition:background .15s,border-color .15s;display:flex;justify-content:space-between;align-items:center;}
+.preset-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:var(--text);padding:10px 13px;cursor:pointer;text-align:left;font-family:var(--body);font-size:13px;transition:background .15s,border-color .15s;display:flex;justify-content:space-between;align-items:center;}
 .preset-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);}
 .preset-exp{font-family:var(--pixel);font-size:7px;color:var(--gold);}
 .preset-divider{text-align:center;font-size:11px;color:var(--text-dim);margin-bottom:10px;position:relative;}
 .preset-divider::before,.preset-divider::after{content:'';position:absolute;top:50%;width:35%;height:1px;background:var(--border);}
 .preset-divider::before{left:0;}.preset-divider::after{right:0;}
-.save-preset-row{display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 10px;background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.15);border-radius:8px;cursor:pointer;}
+.save-preset-row{display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 10px;background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.18);border-radius:8px;cursor:pointer;}
 .save-preset-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;}
 .save-preset-row label{font-size:12px;color:var(--gold2);cursor:pointer;}
 .preset-item-row{display:flex;gap:6px;align-items:center;margin-bottom:8px;}
 .preset-item-row input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:var(--body);font-size:13px;padding:7px 10px;outline:none;}
-.preset-item-row input[type=number]{width:60px;flex:none;font-family:var(--pixel);font-size:12px;text-align:center;}
-.preset-item-row input:focus{border-color:rgba(255,255,255,.3);}
+.preset-item-row input[type=number]{width:65px;flex:none;font-family:var(--pixel);font-size:13px;text-align:center;}
 .preset-remove{background:transparent;border:none;color:rgba(255,255,255,.25);cursor:pointer;font-size:14px;padding:2px 4px;}
 .preset-remove:hover{color:#ef4444;}
 
-/* LEVELUP */
-.levelup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;justify-content:center;align-items:center;}
+/* ── LEVELUP ── */
+.levelup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;justify-content:center;align-items:center;}
 .levelup-overlay.open{display:flex;}
 .levelup-box{text-align:center;animation:levelup .4s cubic-bezier(.34,1.56,.64,1);}
 @keyframes levelup{from{transform:scale(.4) rotate(-8deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}
-.levelup-icon{font-size:48px;margin-bottom:10px;}
-.levelup-title{font-family:var(--pixel);font-size:18px;color:var(--gold);text-shadow:0 0 30px rgba(245,200,66,.9);line-height:1.5;margin-bottom:6px;}
-.levelup-sub{font-family:var(--pixel);font-size:8px;color:#60a5fa;margin-bottom:20px;line-height:1.8;}
-.levelup-close{font-family:var(--pixel);font-size:7px;border:1px solid var(--gold);color:var(--gold);background:transparent;padding:10px 16px;border-radius:6px;cursor:pointer;}
+.levelup-icon{font-size:52px;margin-bottom:12px;}
+.levelup-title{font-family:var(--pixel);font-size:22px;color:var(--gold);text-shadow:0 0 30px rgba(245,200,66,.9);line-height:1.5;margin-bottom:8px;}
+.levelup-sub{font-family:var(--pixel);font-size:10px;color:#60a5fa;margin-bottom:22px;line-height:1.8;}
+.levelup-close{font-family:var(--pixel);font-size:9px;border:1px solid var(--gold);color:var(--gold);background:transparent;padding:11px 18px;border-radius:6px;cursor:pointer;}
 
-/* CALENDAR */
+/* ── ONBOARDING ── */
+.onboard-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);z-index:300;justify-content:center;align-items:center;padding:20px;}
+.onboard-overlay.open{display:flex;}
+.onboard-box{background:rgba(18,16,42,.98);border:1px solid rgba(245,200,66,.3);border-radius:20px;padding:28px 24px;width:100%;max-width:400px;animation:pop .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 60px rgba(245,200,66,.1);}
+.onboard-title{font-family:var(--pixel);font-size:10px;color:var(--gold);text-align:center;margin-bottom:6px;text-shadow:0 0 15px rgba(245,200,66,.6);}
+.onboard-sub{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:20px;}
+.onboard-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;}
+.onboard-step{display:flex;gap:12px;align-items:flex-start;}
+.onboard-step-num{font-family:var(--pixel);font-size:9px;color:var(--gold);background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.3);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.onboard-step-text{font-size:13px;color:var(--text);line-height:1.5;padding-top:3px;}
+.onboard-step-text strong{color:var(--gold2);}
+.onboard-btn{width:100%;font-family:var(--pixel);font-size:8px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;padding:14px;border-radius:10px;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,.4);transition:transform .1s;}
+.onboard-btn:hover{transform:translateY(-2px);}
+
+/* ── CALENDAR ── */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.cal-nav-btn{background:transparent;border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:14px;}
+.cal-nav-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:7px;cursor:pointer;font-size:14px;transition:background .15s;}
+.cal-nav-btn:hover{background:rgba(255,255,255,.1);}
 .cal-month{font-family:var(--pixel);font-size:10px;color:var(--gold);}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-.cal-dow{text-align:center;font-size:10px;color:var(--text-dim);padding:4px 0;font-weight:700;}
-.cal-day{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:4px;min-height:52px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;flex-direction:column;align-items:center;}
+.cal-dow{text-align:center;font-size:11px;color:var(--text-dim);padding:4px 0;font-weight:700;}
+.cal-day{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:4px;min-height:54px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;flex-direction:column;align-items:center;}
 .cal-day:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.03);}
 .cal-day.empty{background:transparent;border-color:transparent;cursor:default;}
 .cal-day.today{border-color:var(--gold);background:rgba(245,200,66,.05);}
-.cal-day-num{font-size:11px;font-weight:700;margin-bottom:3px;}
+.cal-day-num{font-size:12px;font-weight:700;margin-bottom:3px;}
 .cal-dots{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;}
 .cal-dot{width:7px;height:7px;border-radius:50%;}
-.cal-detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:150;justify-content:center;align-items:center;padding:16px;}
+.cal-detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);z-index:150;justify-content:center;align-items:center;padding:16px;}
 .cal-detail-overlay.open{display:flex;}
-.cal-detail{background:var(--panel2);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:22px 20px;width:100%;max-width:380px;animation:pop .2s cubic-bezier(.34,1.56,.64,1);}
+.cal-detail{background:rgba(18,16,42,.98);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:22px 20px;width:100%;max-width:380px;animation:pop .2s cubic-bezier(.34,1.56,.64,1);}
 .cal-detail-title{font-family:var(--pixel);font-size:9px;color:var(--gold);margin-bottom:14px;text-align:center;}
-.cal-detail-item{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.cal-detail-item{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
 .cal-detail-item:last-child{border-bottom:none;}
 .cal-detail-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
 .cal-detail-exp{font-family:var(--pixel);font-size:7px;margin-left:auto;white-space:nowrap;}
-.cal-close{font-family:var(--pixel);font-size:7px;border:1px solid var(--border);color:var(--text-dim);background:transparent;padding:10px;border-radius:6px;cursor:pointer;width:100%;margin-top:14px;}
+.cal-close{font-family:var(--pixel);font-size:7px;border:1px solid var(--border);color:var(--text-dim);background:transparent;padding:11px;border-radius:6px;cursor:pointer;width:100%;margin-top:14px;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="header"><h1>⚔ GOAL QUEST ⚔</h1><div class="sub">나의 인생을 레벨업하라</div></div>
+  <div class="header">
+    <h1>⚔ GOAL QUEST ⚔</h1>
+    <div class="sub">나의 인생을 레벨업하라</div>
+    <div class="ver-badge">Ver.0.12</div>
+  </div>
+
+  <!-- DASHBOARD -->
   <div class="page active" id="page-dashboard">
     <div class="dashboard-grid">
       <div class="cat-col" id="catLeft"></div>
@@ -176,6 +271,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
     <div class="section-hd">ACTIVE QUESTS</div>
     <div id="questSections"></div>
   </div>
+
+  <!-- JOURNAL -->
   <div class="page" id="page-journal">
     <div class="section-hd">실행일지</div>
     <div class="cal-nav">
@@ -192,9 +289,37 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
   <button class="nav-btn" id="nav-journal" onclick="showPage('journal')"><span class="nav-icon">📅</span><span>실행일지</span></button>
 </div>
 
-<!-- EXP Modal -->
+<!-- ONBOARDING -->
+<div class="onboard-overlay" id="onboardOverlay">
+  <div class="onboard-box">
+    <div class="onboard-title">⚔ GOAL QUEST ⚔</div>
+    <div class="onboard-sub">매일의 목표를 레벨업하라!</div>
+    <div class="onboard-steps">
+      <div class="onboard-step">
+        <div class="onboard-step-num">1</div>
+        <div class="onboard-step-text">아래 <strong>ACTIVE QUESTS</strong>에서 카테고리를 탭해서 펼쳐보세요.</div>
+      </div>
+      <div class="onboard-step">
+        <div class="onboard-step-num">2</div>
+        <div class="onboard-step-text">오늘 실행한 항목의 <strong>EXP UP 버튼</strong>을 눌러 경험치를 기록하세요.</div>
+      </div>
+      <div class="onboard-step">
+        <div class="onboard-step-num">3</div>
+        <div class="onboard-step-text">경험치가 쌓이면 <strong>레벨업!</strong> 캐릭터가 점점 강해져요 ⚔️</div>
+      </div>
+      <div class="onboard-step">
+        <div class="onboard-step-num">4</div>
+        <div class="onboard-step-text"><strong>실행일지</strong>에서 내가 열심히 살아온 기록을 달력으로 확인할 수 있어요 📅</div>
+      </div>
+    </div>
+    <button class="onboard-btn" onclick="closeOnboard()">시작하기 ▶</button>
+  </div>
+</div>
+
+<!-- EXP MODAL -->
 <div class="modal-overlay" id="expModal">
   <div class="modal">
+    <button class="modal-close-x" onclick="closeModal()">✕</button>
     <div class="modal-title" id="modalTitle">⚡ EXP UP</div>
     <div class="modal-sub" id="modalQuestName"></div>
     <div id="modalModeNote" style="display:none;font-size:11px;color:#facc15;background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.2);border-radius:6px;padding:6px 10px;margin-bottom:12px;text-align:center;"></div>
@@ -218,20 +343,23 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
   </div>
 </div>
 
-<!-- Preset Edit Modal -->
-<div class="modal-overlay" id="presetModal">
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settingsModal">
   <div class="modal">
-    <div class="modal-title">⚙️ 빠른입력 설정</div>
-    <div class="modal-sub" id="presetModalSub"></div>
+    <button class="modal-close-x" onclick="closeSettingsModal()">✕</button>
+    <div class="modal-title">⚙️ 퀘스트 설정</div>
+    <div class="modal-sub" id="settingsModalSub"></div>
+    <div style="font-family:var(--pixel);font-size:7px;color:var(--text-dim);margin-bottom:8px;">빠른입력 항목 (최대 3개)</div>
     <div id="presetEditArea"></div>
     <div class="modal-btns">
-      <button class="btn-cancel" onclick="closePresetModal()">취소</button>
-      <button class="btn-confirm" onclick="savePresets()">저장</button>
+      <button class="btn-cancel" onclick="closeSettingsModal()">취소</button>
+      <button class="btn-confirm" onclick="saveSettings()">저장</button>
     </div>
+    <button class="btn-delete-quest" onclick="confirmDeleteQuest()">🗑 이 퀘스트 삭제</button>
   </div>
 </div>
 
-<!-- Level Up Modal -->
+<!-- LEVELUP -->
 <div class="levelup-overlay" id="lvModal">
   <div class="levelup-box">
     <div class="levelup-icon" id="lvIcon">⭐</div>
@@ -241,7 +369,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
   </div>
 </div>
 
-<!-- Calendar Detail -->
+<!-- CALENDAR DETAIL -->
 <div class="cal-detail-overlay" id="calDetailOverlay">
   <div class="cal-detail">
     <div class="cal-detail-title" id="calDetailTitle"></div>
@@ -251,7 +379,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:1
 </div>
 
 <script>
-const SAVE_KEY='goalquest_v5';
+const SAVE_KEY='goalquest_v5'; // 키 유지 - 기존 데이터 보존
 const CAT_META={
   health: {label:'건강', color:'#ef4444', bg:'rgba(239,68,68,.12)',  icon:'❤️'},
   mental: {label:'맨탈', color:'#a78bfa', bg:'rgba(167,139,250,.12)',icon:'🧠'},
@@ -265,24 +393,23 @@ const LEFT_CATS=['health','mental','family'];
 const RIGHT_CATS=['finance','study','work'];
 
 const DEFAULT_QUESTS=[
-  {id:1, cat:'health', name:'걷기 & 달리기',            lv:1,exp:0,logs:[],presets:[]},
-  {id:2, cat:'health', name:'근력운동',                 lv:1,exp:0,logs:[],presets:[]},
-  {id:3, cat:'health', name:'스트레칭 & 기타',          lv:1,exp:0,logs:[],presets:[]},
-  {id:4, cat:'health', name:'물마시기 & 기타',          lv:1,exp:0,logs:[],presets:[]},
-  {id:5, cat:'mental', name:'명상 & 마음챙김',          lv:1,exp:0,logs:[],presets:[]},
-  {id:6, cat:'mental', name:'기타',                     lv:1,exp:0,logs:[],presets:[]},
+  {id:1, cat:'health', name:'걷기 & 달리기',              lv:1,exp:0,logs:[],presets:[]},
+  {id:2, cat:'health', name:'근력운동',                   lv:1,exp:0,logs:[],presets:[]},
+  {id:3, cat:'health', name:'스트레칭 & 기타',            lv:1,exp:0,logs:[],presets:[]},
+  {id:4, cat:'health', name:'물마시기 & 기타',            lv:1,exp:0,logs:[],presets:[]},
+  {id:5, cat:'mental', name:'명상 & 마음챙김',            lv:1,exp:0,logs:[],presets:[]},
+  {id:6, cat:'mental', name:'기타',                       lv:1,exp:0,logs:[],presets:[]},
   {id:7, cat:'family', name:'가족과 적극적으로 시간보내기',lv:1,exp:0,logs:[],presets:[]},
-  {id:8, cat:'family', name:'식사관련 & 기타',          lv:1,exp:0,logs:[],presets:[]},
-  {id:9, cat:'finance',name:'SOXL투자',                 lv:1,exp:0,logs:[],presets:[]},
-  {id:10,cat:'finance',name:'재정상황 정리 & 기타',     lv:1,exp:0,logs:[],presets:[]},
-  {id:11,cat:'study',  name:'독서',                     lv:1,exp:0,logs:[],presets:[]},
-  {id:12,cat:'study',  name:'코딩 & 기타',              lv:1,exp:0,logs:[],presets:[]},
-  {id:13,cat:'work',   name:'일일 업무 목표 달성',      lv:1,exp:0,logs:[],presets:[]},
-  {id:14,cat:'work',   name:'기타',                     lv:1,exp:0,logs:[],presets:[]},
+  {id:8, cat:'family', name:'식사관련 & 기타',            lv:1,exp:0,logs:[],presets:[]},
+  {id:9, cat:'finance',name:'SOXL투자',                   lv:1,exp:0,logs:[],presets:[]},
+  {id:10,cat:'finance',name:'재정상황 정리 & 기타',       lv:1,exp:0,logs:[],presets:[]},
+  {id:11,cat:'study',  name:'독서',                       lv:1,exp:0,logs:[],presets:[]},
+  {id:12,cat:'study',  name:'코딩 & 기타',                lv:1,exp:0,logs:[],presets:[]},
+  {id:13,cat:'work',   name:'일일 업무 목표 달성',        lv:1,exp:0,logs:[],presets:[]},
+  {id:14,cat:'work',   name:'기타',                       lv:1,exp:0,logs:[],presets:[]},
 ];
 const DEFAULT_CATS={health:{lv:1,exp:0},mental:{lv:1,exp:0},family:{lv:1,exp:0},finance:{lv:1,exp:0},study:{lv:1,exp:0},work:{lv:1,exp:0}};
 
-// EXP CURVE
 const EXP_TABLE=[0,2,5,10,18,30,45,65,90,120,160,200,250,310,380,460,550,650,760,880,1000,
   1150,1310,1480,1660,1850,2050,2260,2480,2710,2950,3200,3460,3730,4010,4300,4600,4910,5230,5560,5900,
   6260,6630,7010,7400,7800,8210,8630,9060,9500,9950,10420,10900,11390,11890,12400,12920,13450,13990,14540,15100,
@@ -297,141 +424,67 @@ function lifeTitleForLv(lv){
   if(lv<90)return'신화의 기사';return'황금 기사단장';
 }
 
-// LV GLOW based on level
-function lvGlow(lv, color){
-  const intensity = Math.min(lv/20, 1);
-  const spread = 4 + Math.floor(lv/5)*2;
-  const opacity = 0.6 + intensity*0.4;
-  return `text-shadow:0 0 ${spread}px ${color},0 0 ${spread*2}px ${color}${opacity>0.8?`,0 0 ${spread*3}px ${color}`:''}`;
+function lvGlow(lv,color){
+  const s=Math.min(lv/15,1);
+  const r=4+Math.floor(lv/4)*1.5;
+  return `text-shadow:0 0 ${r}px ${color},0 0 ${r*1.8}px ${color}${s>.6?`,0 0 ${r*3}px ${color}44`:''}`;
 }
 
-// PIXEL ART KNIGHT SVG
+// PIXEL KNIGHT
 function knightSVG(lv){
   const tier=lv>=90?10:lv>=80?9:lv>=70?8:lv>=60?7:lv>=50?6:lv>=40?5:lv>=30?4:lv>=20?3:lv>=10?2:lv>=5?1:0;
   const tierStart=[1,5,10,20,30,40,50,60,70,80,90];
   const micro=Math.min(4,lv-tierStart[tier]);
-
-  // Pixel grid: each "pixel" = 4x4 in 64x64 viewbox
-  // Colors per tier
   const C=[
-    // tier 0: wooden peasant
     {skin:'#f4a460',hair:'#4a2800',cloth:'#8B6914',armor:'#a07820',blade:'#c8a84a',shield:'#7a5c10',boot:'#5a3c08',bg:'#3a2008',eye:'#2a1800'},
-    // tier 1: leather
-    {skin:'#f4a460',hair:'#3a1800',cloth:'#6b4c2a',armor:'#7d5a32',blade:'#c0a060',shield:'#5a3d1e',boot:'#3d2408',bg:'#2a1400',eye:'#1a0800'},
-    // tier 2: iron
+    {skin:'#f4a460',hair:'#3a1800',cloth:'#6b4c2a',armor:'#7d5a32',blade:'#c0a060',shield:'#5a3d1e',boot:'#3d2408',bg:'#2a1400',eye:'#8a4010'},
     {skin:'#f4c090',hair:'#2a2a2a',cloth:'#5a6070',armor:'#7a8090',blade:'#b0c0d0',shield:'#5a6070',boot:'#3a4050',bg:'#2a3040',eye:'#60a0e0'},
-    // tier 3: steel
     {skin:'#f4c090',hair:'#1a1a3a',cloth:'#6a7888',armor:'#909faf',blade:'#d0e0f0',shield:'#6a7888',boot:'#404858',bg:'#303848',eye:'#80c0ff'},
-    // tier 4: blue steel
     {skin:'#f4d0a0',hair:'#0a0a2a',cloth:'#2a4878',armor:'#4a70a8',blade:'#a0c8f8',shield:'#2a4878',boot:'#1a3060',bg:'#101828',eye:'#40a8ff'},
-    // tier 5: dark knight
     {skin:'#d0a880',hair:'#080808',cloth:'#1a1a28',armor:'#383848',blade:'#8080f0',shield:'#1a1a28',boot:'#101018',bg:'#080810',eye:'#8040ff'},
-    // tier 6: silver
     {skin:'#f4e0c0',hair:'#e0e0f0',cloth:'#909aa8',armor:'#c0c8d8',blade:'#e8f0ff',shield:'#909aa8',boot:'#606870',bg:'#404850',eye:'#c0e8ff'},
-    // tier 7: gold trim
     {skin:'#f4e0b0',hair:'#c0a030',cloth:'#707880',armor:'#c0a030',blade:'#f0d060',shield:'#707880',boot:'#505860',bg:'#383840',eye:'#ffd040'},
-    // tier 8: crimson
     {skin:'#f4c0a0',hair:'#600010',cloth:'#681820',armor:'#b02838',blade:'#ff8090',shield:'#681820',boot:'#401018',bg:'#280808',eye:'#ff2040'},
-    // tier 9: radiant
     {skin:'#fff0d0',hair:'#d0a020',cloth:'#a08020',armor:'#e0c040',blade:'#fff080',shield:'#a08020',boot:'#806010',bg:'#504000',eye:'#ffee00'},
-    // tier 10: max golden
     {skin:'#fff8e0',hair:'#f5c842',cloth:'#c09018',armor:'#f5c842',blade:'#ffffc0',shield:'#c09018',boot:'#8a6000',bg:'#604800',eye:'#ffffff'},
   ];
   const c=C[tier];
-
-  // Micro changes per level within tier
-  const swordGlow = micro>=1?`<rect x="44" y="8" width="4" height="2" fill="${c.blade}" opacity=".9"/>`:'' ;
-  const shieldStar = micro>=2?`<rect x="8" y="28" width="2" height="2" fill="${c.blade}" opacity=".8"/><rect x="6" y="30" width="6" height="2" fill="${c.blade}" opacity=".8"/><rect x="8" y="32" width="2" height="2" fill="${c.blade}" opacity=".8"/>`:'' ;
-  const helmetPlume = micro>=3?`<rect x="22" y="4" width="4" height="2" fill="${c.blade}"/><rect x="20" y="6" width="8" height="2" fill="${c.blade}" opacity=".8"/>`:'' ;
-  const armorGem = micro>=4?`<rect x="26" y="26" width="4" height="4" fill="${c.blade}" opacity=".9"/>`:'' ;
-
-  // Aura for high tier
-  const auraColor = tier>=8 ? c.blade : 'transparent';
-  const auraOpacity = tier>=9 ? '0.25' : tier>=8 ? '0.15' : '0';
-
-  // Glow filter
-  const glowId = `g${lv}`;
-  const glowFilter = tier>=4 ? `<filter id="${glowId}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="${1+tier*0.3}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` : '';
-  const gf = tier>=4 ? `filter="url(#${glowId})"` : '';
-
-  // Stars for very high tier
-  const stars = tier>=7 ? `
-    <rect x="2" y="4" width="2" height="2" fill="${c.blade}" opacity=".7"><animate attributeName="opacity" values=".7;.1;.7" dur="1.1s" repeatCount="indefinite"/></rect>
-    <rect x="56" y="8" width="2" height="2" fill="${c.blade}" opacity=".5"><animate attributeName="opacity" values=".5;.0;.5" dur=".8s" repeatCount="indefinite"/></rect>
-    <rect x="58" y="50" width="2" height="2" fill="${c.blade}" opacity=".6"><animate attributeName="opacity" values=".6;.1;.6" dur="1.3s" repeatCount="indefinite"/></rect>` : '';
-
-  return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
-<defs>${glowFilter}</defs>
-${stars}
-<g ${gf}>
-<!-- Aura -->
-${tier>=8?`<rect x="1" y="1" width="62" height="62" rx="4" fill="none" stroke="${auraColor}" stroke-width="2" opacity="${auraOpacity}"><animate attributeName="opacity" values="${auraOpacity};${parseFloat(auraOpacity)/4};${auraOpacity}" dur="1.8s" repeatCount="indefinite"/></rect>`:''}
-
-<!-- SWORD (right side) -->
-<rect x="46" y="10" width="4" height="28" fill="${c.blade}"/>
-<rect x="44" y="10" width="8" height="4" fill="${c.armor}"/>
-<rect x="48" y="38" width="2" height="8" fill="${c.armor}"/>
-${swordGlow}
-
-<!-- SHIELD (left side) -->
-<rect x="4" y="24" width="12" height="16" rx="1" fill="${c.shield}"/>
-<rect x="6" y="26" width="8" height="12" fill="${c.armor}" opacity=".5"/>
-${shieldStar}
-
-<!-- LEGS -->
-<rect x="22" y="46" width="8" height="10" fill="${c.armor}"/>
-<rect x="34" y="46" width="8" height="10" fill="${c.armor}"/>
-<!-- Boots -->
-<rect x="20" y="54" width="10" height="6" fill="${c.boot}"/>
-<rect x="32" y="54" width="10" height="6" fill="${c.boot}"/>
-
-<!-- BODY/TORSO -->
-<rect x="18" y="30" width="28" height="18" fill="${c.armor}"/>
-${armorGem}
-<!-- Belt -->
+  const glowId=`g${lv}`;
+  const glowFilter=tier>=4?`<filter id="${glowId}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="${1+tier*0.3}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`:'';
+  const gf=tier>=4?`filter="url(#${glowId})"`:'';
+  const stars=tier>=7?`<rect x="2" y="4" width="2" height="2" fill="${c.blade}" opacity=".7"><animate attributeName="opacity" values=".7;.1;.7" dur="1.1s" repeatCount="indefinite"/></rect><rect x="56" y="8" width="2" height="2" fill="${c.blade}" opacity=".5"><animate attributeName="opacity" values=".5;0;.5" dur=".8s" repeatCount="indefinite"/></rect><rect x="58" y="48" width="2" height="2" fill="${c.blade}" opacity=".6"><animate attributeName="opacity" values=".6;.1;.6" dur="1.3s" repeatCount="indefinite"/></rect>`:'';
+  const aura=tier>=8?`<rect x="1" y="1" width="62" height="62" rx="4" fill="none" stroke="${c.blade}" stroke-width="2" opacity=".12"><animate attributeName="opacity" values=".12;.02;.12" dur="1.8s" repeatCount="indefinite"/></rect>`:'';
+  const swordTip=micro>=1?`<rect x="44" y="8" width="4" height="2" fill="${c.blade}" opacity=".9"/>`:'' ;
+  const shieldStar=micro>=2?`<rect x="8" y="28" width="2" height="2" fill="${c.blade}" opacity=".8"/><rect x="6" y="30" width="6" height="2" fill="${c.blade}" opacity=".8"/><rect x="8" y="32" width="2" height="2" fill="${c.blade}" opacity=".8"/>`:'' ;
+  const helmPlume=micro>=3?`<rect x="22" y="4" width="4" height="2" fill="${c.blade}"/><rect x="20" y="6" width="8" height="2" fill="${c.blade}" opacity=".8"/>`:'' ;
+  const armorGem=micro>=4?`<rect x="26" y="26" width="4" height="4" fill="${c.blade}" opacity=".9"/>`:'' ;
+  const eyeColor=micro>=1?c.blade:c.eye;
+  return `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated"><defs>${glowFilter}</defs>${stars}<g ${gf}>${aura}
+<rect x="46" y="10" width="4" height="28" fill="${c.blade}"/><rect x="44" y="10" width="8" height="4" fill="${c.armor}"/><rect x="48" y="38" width="2" height="8" fill="${c.armor}"/>${swordTip}
+<rect x="4" y="24" width="12" height="16" rx="1" fill="${c.shield}"/><rect x="6" y="26" width="8" height="12" fill="${c.armor}" opacity=".5"/>${shieldStar}
+<rect x="22" y="46" width="8" height="10" fill="${c.armor}"/><rect x="34" y="46" width="8" height="10" fill="${c.armor}"/>
+<rect x="20" y="54" width="10" height="6" fill="${c.boot}"/><rect x="32" y="54" width="10" height="6" fill="${c.boot}"/>
+<rect x="18" y="30" width="28" height="18" fill="${c.armor}"/>${armorGem}
 <rect x="18" y="44" width="28" height="4" fill="${c.bg}"/>
-
-<!-- ARMS -->
-<rect x="12" y="30" width="8" height="10" fill="${c.armor}"/>
-<rect x="44" y="30" width="8" height="10" fill="${c.armor}"/>
-
-<!-- NECK -->
+<rect x="12" y="30" width="8" height="10" fill="${c.armor}"/><rect x="44" y="30" width="8" height="10" fill="${c.armor}"/>
 <rect x="26" y="24" width="12" height="8" fill="${c.skin}"/>
-
-<!-- HEAD/HELMET -->
-<!-- Helmet base -->
-<rect x="16" y="10" width="32" height="16" fill="${c.armor}"/>
-<!-- Helmet top -->
-<rect x="20" y="6" width="24" height="6" fill="${c.armor}"/>
-${helmetPlume}
-<!-- Visor/face area -->
+<rect x="16" y="10" width="32" height="16" fill="${c.armor}"/><rect x="20" y="6" width="24" height="6" fill="${c.armor}"/>${helmPlume}
 <rect x="18" y="18" width="28" height="10" fill="${c.bg}"/>
-<!-- Eyes -->
-<rect x="22" y="20" width="6" height="4" fill="${c.eye}"/>
-<rect x="36" y="20" width="6" height="4" fill="${c.eye}"/>
-<!-- Eye pupils - change color with micro level -->
-<rect x="24" y="21" width="2" height="2" fill="${micro>=1?c.blade:'#000'}"/>
-<rect x="38" y="21" width="2" height="2" fill="${micro>=1?c.blade:'#000'}"/>
-<!-- Nose slit -->
+<rect x="22" y="20" width="6" height="4" fill="${c.eye}"/><rect x="36" y="20" width="6" height="4" fill="${c.eye}"/>
+<rect x="24" y="21" width="2" height="2" fill="${eyeColor}"/><rect x="38" y="21" width="2" height="2" fill="${eyeColor}"/>
 <rect x="30" y="24" width="4" height="2" fill="${c.bg}"/>
-
-<!-- Helmet crest -->
-${tier>=1?`<rect x="28" y="4" width="8" height="4" fill="${c.blade}"/>`:'' }
-${tier>=3?`<rect x="26" y="2" width="12" height="4" fill="${c.blade}"/><rect x="28" y="0" width="8" height="2" fill="${c.blade}" opacity=".8"/>`:'' }
-${tier>=7?`<rect x="24" y="0" width="16" height="2" fill="${c.blade}"/><rect x="26" y="2" width="12" height="2" fill="${c.blade}" opacity=".9"/>`:'' }
-
-<!-- Armor details based on tier -->
-${tier>=2?`<rect x="18" y="34" width="28" height="2" fill="${c.bg}" opacity=".4"/>`:'' }
-${tier>=5?`<rect x="26" y="32" width="12" height="8" fill="${c.blade}" opacity=".2"/>`:'' }
-${tier>=8?`<rect x="18" y="30" width="28" height="2" fill="${c.blade}" opacity=".3"/><rect x="18" y="42" width="28" height="2" fill="${c.blade}" opacity=".3"/>`:'' }
-
-</g>
-</svg>`;
+${tier>=1?`<rect x="28" y="4" width="8" height="4" fill="${c.blade}"/>`:''}
+${tier>=3?`<rect x="26" y="2" width="12" height="4" fill="${c.blade}"/><rect x="28" y="0" width="8" height="2" fill="${c.blade}" opacity=".8"/>`:''}
+${tier>=7?`<rect x="24" y="0" width="16" height="2" fill="${c.blade}"/>`:''}
+${tier>=2?`<rect x="18" y="34" width="28" height="2" fill="${c.bg}" opacity=".4"/>`:''}
+${tier>=5?`<rect x="26" y="32" width="12" height="8" fill="${c.blade}" opacity=".2"/>`:''}
+${tier>=8?`<rect x="18" y="30" width="28" height="2" fill="${c.blade}" opacity=".3"/><rect x="18" y="42" width="28" height="2" fill="${c.blade}" opacity=".3"/>`:''}
+</g></svg>`;
 }
 
 // STATE
 let state={quests:[],cats:{},life:{lv:1,exp:0},collapsed:{},journal:{}};
-let activeQuestId=null,lvQueue=[],showingLv=false,presetEditId=null;
+let activeQuestId=null,settingsQuestId=null,lvQueue=[],showingLv=false;
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 
 function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(state));}
@@ -440,18 +493,17 @@ function load(){
     const r=localStorage.getItem(SAVE_KEY);
     if(r){
       state=JSON.parse(r);
-      state.quests.forEach(q=>{if(!q.presets)q.presets=[];});
+      state.quests.forEach(q=>{if(!q.presets)q.presets=[];if(!q.logs)q.logs=[];});
       if(!state.journal)state.journal={};
       if(!state.cats.mental)state.cats.mental={lv:1,exp:0};
-      // Migrate old logs to journal
+      // Migrate logs → journal
       state.quests.forEach(q=>{
         (q.logs||[]).forEach(l=>{
           if(!state.journal[l.date])state.journal[l.date]=[];
-          const already=state.journal[l.date].find(e=>e.questName===q.name&&e.exp===l.exp);
+          const already=state.journal[l.date].find(e=>e.questName===q.name&&e.exp===l.exp&&e.memo===l.memo);
           if(!already)state.journal[l.date].push({cat:q.cat,questName:q.name,exp:l.exp,memo:l.memo});
         });
       });
-      // Default all quest cats collapsed
       CAT_KEYS.forEach(k=>{if(state.collapsed['q_'+k]===undefined)state.collapsed['q_'+k]=true;});
       return;
     }
@@ -460,10 +512,14 @@ function load(){
   CAT_KEYS.forEach(k=>state.collapsed['q_'+k]=true);
 }
 
-function todayStr(){return new Date().toLocaleDateString('ko-KR',{month:'short',day:'numeric'});}
-function dateKey(d){return d.toLocaleDateString('ko-KR',{year:'numeric',month:'short',day:'numeric'});}
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function dateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function getTodayLog(q){return q.logs.find(l=>l.date===todayStr())||null;}
-function hasDoneToday(catKey){return state.quests.filter(q=>q.cat===catKey).some(q=>getTodayLog(q));}
+function catQuestsDoneToday(catKey){
+  const qs=state.quests.filter(q=>q.cat===catKey);
+  const done=qs.filter(q=>getTodayLog(q)).length;
+  return{total:qs.length,done};
+}
 
 // PAGE NAV
 function showPage(name){
@@ -474,6 +530,12 @@ function showPage(name){
   if(name==='journal')renderCalendar();
 }
 
+// ONBOARDING
+function closeOnboard(){
+  document.getElementById('onboardOverlay').classList.remove('open');
+  localStorage.setItem('gq_onboard','done');
+}
+
 // RENDER LIFE
 function renderLife(){
   const L=state.life;
@@ -481,33 +543,34 @@ function renderLife(){
   const pct=L.lv>=100?100:Math.min(100,(L.exp/maxExp)*100);
   document.getElementById('lifeLvText').textContent=`LV.${L.lv}`;
   document.getElementById('lifeTitleText').textContent=lifeTitleForLv(L.lv);
-  document.getElementById('lifeExpText').textContent=L.lv>=100?'MAX':(`EXP ${L.exp}/${maxExp}`);
+  document.getElementById('lifeExpText').textContent=L.lv>=100?'MAX':`EXP ${L.exp}/${maxExp}`;
   document.getElementById('lifeBar').style.width=pct+'%';
   document.getElementById('knightWrap').innerHTML=knightSVG(L.lv);
 }
 
-// RENDER DASHBOARD CATS
+// RENDER DASHBOARD CATS (quest dots instead of exp bar)
 function renderDashCats(){
   ['Left','Right'].forEach((side,si)=>{
     const keys=si===0?LEFT_CATS:RIGHT_CATS;
     document.getElementById('cat'+side).innerHTML=keys.map(key=>{
       const meta=CAT_META[key];
       const cat=state.cats[key];
-      const maxExp=expForLv(cat.lv);
-      const pct=Math.min(100,(cat.exp/maxExp)*100);
-      const done=hasDoneToday(key);
-      // Parse color to get RGB for background tint
-      const bgStyle=done?`background:${meta.bg.replace('.12','0.18')};box-shadow:0 0 12px ${meta.color}55;border-color:${meta.color};`:'' ;
+      const {total,done}=catQuestsDoneToday(key);
+      const allDone=total>0&&done===total;
+      const anyDone=done>0;
       const glowStyle=lvGlow(cat.lv,meta.color);
-      return `<div class="cat-mini-card${done?' done-today':''}" style="${bgStyle}">
+      let cardStyle='';
+      if(allDone) cardStyle=`background:${meta.bg.replace('.12','.22')};box-shadow:0 0 16px ${meta.color}66;border-color:${meta.color};`;
+      else if(anyDone) cardStyle=`border-color:${meta.color}99;box-shadow:0 0 8px ${meta.color}33;`;
+      const dots=Array.from({length:total},(_,i)=>`<div class="quest-dot${i<done?' done':''}" style="${i<done?`background:${meta.color};`:`border-color:${meta.color}66;`}"></div>`).join('');
+      return `<div class="cat-mini-card${allDone?' full-done':anyDone?' partial':''}" style="${cardStyle}">
         <div class="cat-mini-top">
           <div class="cat-mini-dot" style="background:${meta.color}"></div>
           <span class="cat-mini-name">${meta.icon} ${meta.label}</span>
           <span class="cat-mini-lv" style="color:${meta.color};${glowStyle}">LV.${cat.lv}</span>
         </div>
-        <div class="cat-mini-bar-wrap">
-          <div class="cat-mini-bar-fill" style="width:${pct}%;background:${meta.color}"></div>
-        </div>
+        <div class="quest-dots">${dots}</div>
+        ${allDone?`<div style="font-size:10px;color:${meta.color};text-align:center;margin-top:4px;font-weight:800;">완료! 🎉</div>`:''}
       </div>`;
     }).join('');
   });
@@ -519,37 +582,46 @@ function renderQuests(){
     const meta=CAT_META[key];
     const quests=state.quests.filter(q=>q.cat===key);
     const isOpen=!state.collapsed['q_'+key];
+    const cat=state.cats[key];
+    const maxCatExp=expForLv(cat.lv);
+    const catPct=Math.min(100,(cat.exp/maxCatExp)*100);
+    const catGlow=lvGlow(cat.lv,meta.color);
     const qHtml=quests.map(q=>{
       const maxExp=expForLv(q.lv);
       const pct=Math.min(100,(q.exp/maxExp)*100);
       const todayLog=getTodayLog(q);
-      const glowStyle=lvGlow(q.lv,meta.color);
-      const doneStyle=todayLog?`background:${meta.bg.replace('.12','0.15')};box-shadow:0 0 14px ${meta.color}44;border-color:${meta.color};`:'';
+      const questGlow=lvGlow(q.lv,meta.color);
+      const doneStyle=todayLog?`background:${meta.bg.replace('.12','.14')};box-shadow:0 0 12px ${meta.color}33;border-color:${meta.color};`:'';
       const todayLogHtml=todayLog?`<div class="log-area"><div class="log-entry" style="border-color:${meta.color}">
         <span class="log-exp" style="color:${meta.color}">+${todayLog.exp} EXP</span>
-        <span>${todayLog.memo}</span>
+        <span style="font-size:12px">${todayLog.memo}</span>
       </div></div>`:'';
+      // EXP UP button: big and colorful
+      const btnBg=todayLog?`rgba(255,255,255,.07)`:`${meta.color}`;
+      const btnColor=todayLog?meta.color:`#fff`;
+      const btnShadow=todayLog?'none':`0 4px 14px ${meta.color}55`;
+      const btnText=todayLog?'✏️ 수정':'EXP UP ⚡';
       return `<div class="quest-card${todayLog?' done-today':''}" style="${doneStyle}">
         <div class="quest-top">
           <div class="quest-name-wrap">
-            <span class="quest-name">${q.name}</span>
-            <span class="quest-lv-big" style="color:${meta.color};${glowStyle}">LV.${q.lv}</span>
+            <span class="quest-name" style="font-size:15px">${q.name}</span>
+            <span class="quest-lv-big" style="color:${meta.color};${questGlow}">LV.${q.lv}</span>
           </div>
-          <button class="btn-preset-edit" onclick="openPresetModal(${q.id})" title="빠른입력 설정">⚙️</button>
-          <button class="btn-del" onclick="delQuest(${q.id})">✕</button>
+          <button class="btn-settings" onclick="openSettingsModal(${q.id})" title="설정">⚙️</button>
         </div>
         <div class="quest-row">
           <div class="quest-bar-wrap"><div class="quest-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${meta.color}88,${meta.color})"></div></div>
-          <button class="exp-up-btn" onclick="openModal(${q.id})" style="border-color:${meta.color}55;color:${meta.color}">${todayLog?'✏️ 수정':'EXP UP'}</button>
+          <button class="exp-up-btn" onclick="openModal(${q.id})" style="background:${btnBg};color:${btnColor};box-shadow:${btnShadow};border:none">${btnText}</button>
         </div>
         ${todayLogHtml}
       </div>`;
     }).join('');
-    return `<div class="cat-section" style="margin-bottom:10px">
+    return `<div class="cat-section" style="margin-bottom:9px">
       <div class="cat-header" onclick="toggleQuestCat('${key}')">
         <div class="cat-dot" style="background:${meta.color}"></div>
-        <span class="cat-h-name">${meta.label} 퀘스트</span>
-        <span class="cat-h-lv" style="color:${meta.color};border-color:${meta.color};background:${meta.bg};${lvGlow(state.cats[key].lv,meta.color)}">LV.${state.cats[key].lv}</span>
+        <span class="cat-h-name" style="font-size:14px">${meta.label} 퀘스트</span>
+        <span class="cat-h-lv" style="color:${meta.color};border-color:${meta.color};background:${meta.bg};${catGlow}">LV.${cat.lv}</span>
+        <div class="cat-h-bar-wrap"><div class="cat-h-bar-fill" style="width:${catPct}%;background:${meta.color}"></div></div>
         <span class="cat-toggle ${isOpen?'open':''}">▼</span>
       </div>
       ${isOpen?`<div class="cat-body">${qHtml}
@@ -570,10 +642,6 @@ function addQuest(catKey){
   const name=inp.value.trim();if(!name)return;
   state.quests.push({id:Date.now(),cat:catKey,name,lv:1,exp:0,logs:[],presets:[]});
   inp.value='';save();renderQuests();
-}
-function delQuest(id){
-  if(!confirm('이 퀘스트를 삭제할까요?'))return;
-  state.quests=state.quests.filter(q=>q.id!==id);save();renderQuests();
 }
 
 // EXP MODAL
@@ -601,17 +669,13 @@ function openModal(id){
     document.getElementById('memoInput').value='';
     saveRow.style.display='flex';
   }
-  // Presets
   const presetArea=document.getElementById('presetArea');
   if(q.presets&&q.presets.length>0&&!todayLog){
     presetArea.innerHTML=`<div class="preset-btns">${q.presets.map((p,i)=>`
       <button class="preset-btn" onclick="selectPreset(${i})">
         <span>${p.memo}</span><span class="preset-exp">+${p.exp} EXP</span>
-      </button>`).join('')}</div>
-      <div class="preset-divider">직접 입력</div>`;
-  } else {
-    presetArea.innerHTML='';
-  }
+      </button>`).join('')}</div><div class="preset-divider">직접 입력</div>`;
+  } else {presetArea.innerHTML='';}
   document.getElementById('expModal').classList.add('open');
   setTimeout(()=>document.getElementById('expInput').focus(),80);
 }
@@ -631,33 +695,27 @@ function confirmExp(){
   const meta=CAT_META[q.cat];
   const today=todayStr();
   const todayLog=getTodayLog(q);
-
-  // Save as preset if checked
-  const saveCheck=document.getElementById('savePresetCheck').checked;
-  if(saveCheck&&memo!=='기록 없음'&&!todayLog){
+  // Save preset
+  if(document.getElementById('savePresetCheck').checked&&memo!=='기록 없음'&&!todayLog){
     if(!q.presets)q.presets=[];
-    const exists=q.presets.find(p=>p.memo===memo&&p.exp===newExp);
-    if(!exists&&q.presets.length<3)q.presets.push({memo,exp:newExp});
+    if(!q.presets.find(p=>p.memo===memo&&p.exp===newExp)&&q.presets.length<3)
+      q.presets.push({memo,exp:newExp});
   }
-
   if(todayLog){
     const diff=newExp-todayLog.exp;
     if(diff===0&&memo===todayLog.memo){closeModal();return;}
-    // Update journal entry
     if(state.journal[today]){
       const ji=state.journal[today].findIndex(e=>e.questName===q.name);
       if(ji>=0){state.journal[today][ji].exp=newExp;state.journal[today][ji].memo=memo;}
     }
     todayLog.exp=newExp;todayLog.memo=memo;
-    if(diff>0){q.exp+=diff;}
-    else if(diff<0){q.exp=Math.max(0,q.exp+diff);}
+    if(diff>0){q.exp+=diff;}else if(diff<0){q.exp=Math.max(0,q.exp+diff);}
   } else {
     q.exp+=newExp;
     q.logs.unshift({date:today,exp:newExp,memo});
     if(!state.journal[today])state.journal[today]=[];
     state.journal[today].push({cat:q.cat,questName:q.name,exp:newExp,memo});
   }
-
   while(q.exp>=expForLv(q.lv)){
     q.exp-=expForLv(q.lv);const prevLv=q.lv;q.lv++;
     lvQueue.push({icon:meta.icon,title:'LEVEL UP!',sub:`${meta.label} — ${q.name}\n→  LV.${q.lv}`});
@@ -666,14 +724,14 @@ function confirmExp(){
   closeModal();save();render();processQ();
 }
 
-// PRESET EDIT
-function openPresetModal(id){
-  presetEditId=id;
+// SETTINGS MODAL
+function openSettingsModal(id){
+  settingsQuestId=id;
   const q=state.quests.find(x=>x.id===id);
   const meta=CAT_META[q.cat];
-  document.getElementById('presetModalSub').textContent=`${meta.label} — ${q.name}`;
+  document.getElementById('settingsModalSub').textContent=`${meta.label} — ${q.name}`;
   renderPresetEdit(q.presets||[]);
-  document.getElementById('presetModal').classList.add('open');
+  document.getElementById('settingsModal').classList.add('open');
 }
 function renderPresetEdit(presets){
   const rows=presets.map((p,i)=>`<div class="preset-item-row">
@@ -685,26 +743,32 @@ function renderPresetEdit(presets){
   document.getElementById('presetEditArea').innerHTML=rows+addBtn;
 }
 function addPresetRow(){
-  const q=state.quests.find(x=>x.id===presetEditId);
+  const q=state.quests.find(x=>x.id===settingsQuestId);
   if(!q.presets)q.presets=[];
   if(q.presets.length>=3)return;
   q.presets.push({memo:'',exp:1});renderPresetEdit(q.presets);
 }
 function removePresetRow(i){
-  const q=state.quests.find(x=>x.id===presetEditId);
+  const q=state.quests.find(x=>x.id===settingsQuestId);
   q.presets.splice(i,1);renderPresetEdit(q.presets);
 }
-function savePresets(){
-  const q=state.quests.find(x=>x.id===presetEditId);
+function saveSettings(){
+  const q=state.quests.find(x=>x.id===settingsQuestId);
   const newPresets=[];
   (q.presets||[]).forEach((_,i)=>{
     const memo=document.getElementById('pe_memo_'+i)?.value.trim();
     const exp=parseInt(document.getElementById('pe_exp_'+i)?.value)||1;
     if(memo)newPresets.push({memo,exp});
   });
-  q.presets=newPresets;closePresetModal();save();renderQuests();
+  q.presets=newPresets;
+  closeSettingsModal();save();renderQuests();
 }
-function closePresetModal(){document.getElementById('presetModal').classList.remove('open');presetEditId=null;}
+function confirmDeleteQuest(){
+  if(!confirm('이 퀘스트를 정말 삭제할까요?'))return;
+  state.quests=state.quests.filter(q=>q.id!==settingsQuestId);
+  closeSettingsModal();save();renderQuests();renderDashCats();
+}
+function closeSettingsModal(){document.getElementById('settingsModal').classList.remove('open');settingsQuestId=null;}
 
 // PROPAGATE
 function propagateCat(catKey,gain){
@@ -752,8 +816,7 @@ function renderCalendar(){
   const firstDay=new Date(calYear,calMonth,1).getDay();
   const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
   const today=new Date();
-  const dows=['일','월','화','수','목','금','토'];
-  let html=dows.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  let html=['일','월','화','수','목','금','토'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
   for(let i=0;i<firstDay;i++)html+=`<div class="cal-day empty"></div>`;
   for(let d=1;d<=daysInMonth;d++){
     const dt=new Date(calYear,calMonth,d);
@@ -770,11 +833,10 @@ function renderCalendar(){
 }
 function openCalDetail(key){
   const entries=state.journal[key]||[];
-  document.getElementById('calDetailTitle').textContent=`📅 ${key}`;
-  if(entries.length===0){
-    document.getElementById('calDetailBody').innerHTML=`<div style="text-align:center;color:var(--text-dim);padding:20px;font-size:13px;">기록 없음</div>`;
-  } else {
-    document.getElementById('calDetailBody').innerHTML=entries.map(e=>{
+  const parts=key.split('-');const dispDate=parts[0]+'년 '+parseInt(parts[1])+'월 '+parseInt(parts[2])+'일';document.getElementById('calDetailTitle').textContent='📅 '+dispDate;
+  document.getElementById('calDetailBody').innerHTML=entries.length===0
+    ?`<div style="text-align:center;color:var(--text-dim);padding:20px;font-size:13px;">기록 없음</div>`
+    :entries.map(e=>{
       const meta=CAT_META[e.cat]||{color:'#888',label:e.cat};
       return `<div class="cal-detail-item">
         <div class="cal-detail-dot" style="background:${meta.color}"></div>
@@ -783,18 +845,19 @@ function openCalDetail(key){
         <span class="cal-detail-exp" style="color:${meta.color}">+${e.exp}</span>
       </div>`;
     }).join('');
-  }
   document.getElementById('calDetailOverlay').classList.add('open');
 }
 function closeCalDetail(){document.getElementById('calDetailOverlay').classList.remove('open');}
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeModal();closePresetModal();closeCalDetail();}
+  if(e.key==='Escape'){closeModal();closeSettingsModal();closeCalDetail();}
   if(e.key==='Enter'&&document.getElementById('expModal').classList.contains('open')&&document.activeElement.tagName!=='TEXTAREA')confirmExp();
   if(e.key==='Enter'&&document.getElementById('lvModal').classList.contains('open'))closeLvModal();
 });
 
 load();render();
+// Show onboarding for first time users
+if(!localStorage.getItem('gq_onboard'))document.getElementById('onboardOverlay').classList.add('open');
 </script>
 </body>
 </html>
