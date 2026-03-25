@@ -262,7 +262,7 @@ body::after{
   <div class="header">
     <h1>⚔ GOAL QUEST ⚔</h1>
     <div class="sub">나의 인생을 레벨업하라</div>
-    <div class="ver-badge">Ver.0.13</div>
+    <div class="ver-badge" id="verBadge" onclick="handleVerTap()" style="cursor:pointer;user-select:none;">Ver.0.13</div>
   </div>
 
   <!-- DASHBOARD -->
@@ -400,6 +400,23 @@ body::after{
     <div class="cal-detail-title" id="calDetailTitle"></div>
     <div id="calDetailBody"></div>
     <button class="cal-close" onclick="closeCalDetail()">닫기</button>
+  </div>
+</div>
+
+<!-- RESET CONFIRM MODAL -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal" style="border-color:rgba(239,68,68,.4);">
+    <div style="text-align:center;font-size:32px;margin-bottom:10px;">⚠️</div>
+    <div class="modal-title" style="color:#ef4444;">데이터 초기화</div>
+    <div style="font-size:13px;color:var(--text-dim);text-align:center;margin:14px 0;line-height:1.7;">
+      모든 레벨, 경험치, 실행일지가<br>
+      <strong style="color:#ef4444;">완전히 삭제</strong>됩니다.<br>
+      이 작업은 되돌릴 수 없어요!
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeResetModal()">취소</button>
+      <button class="btn-confirm" style="background:linear-gradient(135deg,#ef4444,#b91c1c);box-shadow:0 4px 14px rgba(239,68,68,.4);" onclick="executeReset()">초기화 실행</button>
+    </div>
   </div>
 </div>
 
@@ -976,6 +993,35 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&document.getElementById('expModal').classList.contains('open')&&document.activeElement.tagName!=='TEXTAREA')confirmExp();
   if(e.key==='Enter'&&document.getElementById('lvModal').classList.contains('open'))closeLvModal();
 });
+
+// VER BADGE TAP - 5 taps to reset
+let verTapCount=0,verTapTimer=null;
+function handleVerTap(){
+  verTapCount++;
+  const badge=document.getElementById('verBadge');
+  badge.style.color=`rgba(239,68,68,${Math.min(verTapCount/5,1)})`;
+  badge.style.borderColor=`rgba(239,68,68,${Math.min(verTapCount/5,1)*0.6})`;
+  if(verTapTimer)clearTimeout(verTapTimer);
+  if(verTapCount>=5){
+    verTapCount=0;
+    badge.style.color='rgba(255,255,255,.3)';
+    badge.style.borderColor='rgba(255,255,255,.1)';
+    document.getElementById('resetModal').classList.add('open');
+    return;
+  }
+  verTapTimer=setTimeout(()=>{
+    verTapCount=0;
+    badge.style.color='rgba(255,255,255,.3)';
+    badge.style.borderColor='rgba(255,255,255,.1)';
+  },2000);
+}
+function closeResetModal(){document.getElementById('resetModal').classList.remove('open');}
+function executeReset(){
+  localStorage.removeItem(SAVE_KEY);
+  localStorage.removeItem('gq_onboard');
+  closeResetModal();
+  location.reload();
+}
 
 load();render();
 // Show onboarding for first time users
