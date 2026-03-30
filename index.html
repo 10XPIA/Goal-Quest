@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GoalQuest v0.14</title>
+<title>GoalQuest v0.15</title>
 <style>
 :root{
   --bg:#0a0818;--panel:rgba(20,18,45,0.92);--panel2:#181836;--border:#2a2858;
@@ -55,6 +55,53 @@ body::after{
     radial-gradient(ellipse at 85% 60%,rgba(60,100,200,0.06) 0%,transparent 40%),
     radial-gradient(ellipse at 50% 80%,rgba(80,40,160,0.06) 0%,transparent 35%);
   pointer-events:none;
+}
+
+/* ── DUNGEON BACKGROUND ── */
+body.dungeon-mode{
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(80,40,10,0.6) 0%,transparent 50%),
+    radial-gradient(ellipse at 20% 60%,rgba(60,20,5,0.4) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 80%,rgba(40,15,5,0.3) 0%,transparent 50%),
+    linear-gradient(180deg,#0a0600 0%,#140a02 30%,#0f0800 60%,#080400 100%);
+}
+body.dungeon-mode::before{
+  background-image:
+    radial-gradient(2px 2px at 15% 8%,rgba(255,140,0,0.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 30% 20%,rgba(255,100,0,0.3) 0%,transparent 100%),
+    radial-gradient(2px 2px at 55% 5%,rgba(255,160,0,0.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 70% 15%,rgba(200,80,0,0.3) 0%,transparent 100%),
+    radial-gradient(2px 2px at 85% 10%,rgba(255,120,0,0.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 10% 40%,rgba(180,60,0,0.3) 0%,transparent 100%),
+    radial-gradient(2px 2px at 45% 55%,rgba(255,100,0,0.2) 0%,transparent 100%),
+    radial-gradient(1px 1px at 75% 70%,rgba(200,80,0,0.3) 0%,transparent 100%),
+    radial-gradient(2px 2px at 25% 80%,rgba(255,140,0,0.2) 0%,transparent 100%),
+    radial-gradient(1px 1px at 90% 85%,rgba(180,60,0,0.3) 0%,transparent 100%),
+    /* Cave rock texture dots */
+    radial-gradient(3px 2px at 5% 30%,rgba(60,40,20,0.8) 0%,transparent 100%),
+    radial-gradient(4px 3px at 95% 25%,rgba(50,35,15,0.7) 0%,transparent 100%),
+    radial-gradient(3px 2px at 50% 95%,rgba(60,40,20,0.6) 0%,transparent 100%);
+}
+body.dungeon-mode::after{
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(180,80,0,0.12) 0%,transparent 40%),
+    radial-gradient(ellipse at 20% 50%,rgba(120,50,0,0.08) 0%,transparent 40%),
+    radial-gradient(ellipse at 80% 70%,rgba(100,40,0,0.08) 0%,transparent 35%);
+  animation:torch-flicker 3s ease-in-out infinite;
+}
+@keyframes torch-flicker{
+  0%,100%{opacity:1;}
+  25%{opacity:0.8;}
+  50%{opacity:1.1;}
+  75%{opacity:0.85;}
+}
+/* Cave stalactites at top */
+body.dungeon-mode .wrap::before{
+  content:'';position:fixed;top:0;left:0;right:0;height:60px;
+  background:
+    linear-gradient(180deg,#0a0600 0%,transparent 100%);
+  pointer-events:none;z-index:0;
+  clip-path:polygon(0 0,5% 0,5% 40px,8% 0,12% 0,12% 60px,16% 0,20% 0,20% 35px,24% 0,28% 0,28% 50px,33% 0,37% 0,37% 40px,42% 0,46% 0,46% 55px,51% 0,55% 0,55% 38px,60% 0,64% 0,64% 48px,69% 0,73% 0,73% 42px,78% 0,82% 0,82% 52px,87% 0,91% 0,91% 36px,96% 0,100% 0,100% 0);
 }
 
 .wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:16px 12px 80px;}
@@ -225,6 +272,38 @@ body::after{
 .onboard-btn:hover{transform:translateY(-2px);}
 
 /* ── CALENDAR ── */
+/* ── EXP REACTION POPUP ── */
+.exp-react-overlay{
+  display:none;position:fixed;inset:0;z-index:180;
+  background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);
+  justify-content:center;align-items:center;cursor:pointer;
+}
+.exp-react-overlay.open{display:flex;}
+.exp-react-box{
+  text-align:center;padding:40px 30px;
+  animation:exp-react-in 0.4s cubic-bezier(.34,1.56,.64,1);
+  min-width:280px;
+}
+@keyframes exp-react-in{from{transform:scale(0.5) translateY(40px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+.exp-react-num{
+  font-family:var(--pixel);font-size:52px;color:var(--gold);
+  text-shadow:0 0 30px rgba(245,200,66,.9),0 0 60px rgba(245,200,66,.5);
+  margin-bottom:30px;
+  animation:num-pop 0.5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes num-pop{from{transform:scale(0.3);opacity:0;}to{transform:scale(1);opacity:1;}}
+.exp-react-bar-wrap{margin-bottom:16px;}
+.exp-react-bar-label{font-family:var(--pixel);font-size:8px;color:var(--text-dim);margin-bottom:8px;}
+.exp-react-bar-bg{height:20px;background:rgba(255,255,255,.08);border-radius:10px;border:1px solid rgba(255,255,255,.15);overflow:hidden;margin-bottom:6px;}
+.exp-react-bar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--gold),#ffe080);transition:width 0.8s cubic-bezier(.34,1.3,.64,1);position:relative;}
+.exp-react-bar-fill::after{content:'';position:absolute;top:3px;left:6px;right:6px;height:5px;background:rgba(255,255,255,.3);border-radius:5px;}
+.exp-react-bar-pct{font-family:var(--pixel);font-size:7px;color:var(--text-dim);}
+.exp-react-hint{font-size:12px;color:rgba(255,255,255,.3);margin-top:20px;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:.3;}50%{opacity:.8;}}
+/* Dungeon mode reaction - red theme */
+.dungeon-mode .exp-react-num{color:#ff6030;text-shadow:0 0 30px rgba(255,80,0,.9),0 0 60px rgba(255,80,0,.5);}
+.dungeon-mode .exp-react-bar-fill{background:linear-gradient(90deg,#b91c1c,#ef4444,#ff8060);}
+
 /* ── DUNGEON ── */
 .dungeon-banner{background:linear-gradient(135deg,rgba(40,10,10,.95),rgba(60,20,5,.95));border:2px solid rgba(239,68,68,.5);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 0 30px rgba(239,68,68,.15);position:relative;overflow:hidden;}
 .dungeon-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#ef4444,transparent);}
@@ -293,7 +372,7 @@ body::after{
   <div class="header">
     <h1>⚔ GOAL QUEST ⚔</h1>
     <div class="sub">나의 인생을 레벨업하라</div>
-    <div class="ver-badge" id="verBadge" onclick="handleVerTap()" style="cursor:pointer;user-select:none;">Ver.0.14</div>
+    <div class="ver-badge" id="verBadge" onclick="handleVerTap()" style="cursor:pointer;user-select:none;">Ver.0.15</div>
   </div>
 
   <!-- DASHBOARD -->
@@ -342,6 +421,7 @@ body::after{
 <div class="bottom-nav">
   <button class="nav-btn active" id="nav-dashboard" onclick="showPage('dashboard')"><span class="nav-icon">⚔️</span><span>퀘스트</span></button>
   <button class="nav-btn" id="nav-journal" onclick="showPage('journal')"><span class="nav-icon">📅</span><span>실행일지</span></button>
+  <button class="nav-btn" id="nav-sound" onclick="toggleSound()"><span class="nav-icon" id="soundIcon">🔊</span><span>사운드</span></button>
 </div>
 
 <!-- ONBOARDING -->
@@ -443,6 +523,21 @@ body::after{
   </div>
 </div>
 
+<!-- EXP REACTION POPUP -->
+<div class="exp-react-overlay" id="expReactOverlay" onclick="closeExpReact()">
+  <div class="exp-react-box" id="expReactBox">
+    <div class="exp-react-num" id="expReactNum">+1 EXP!</div>
+    <div class="exp-react-bar-wrap">
+      <div class="exp-react-bar-label" id="expReactBarLabel"></div>
+      <div class="exp-react-bar-bg">
+        <div class="exp-react-bar-fill" id="expReactBarFill"></div>
+      </div>
+      <div class="exp-react-bar-pct" id="expReactBarPct"></div>
+    </div>
+    <div class="exp-react-hint">탭하면 계속</div>
+  </div>
+</div>
+
 <!-- MONSTER DEFEAT -->
 <div class="defeat-overlay" id="defeatOverlay">
   <div class="defeat-box">
@@ -521,12 +616,8 @@ const DEFAULT_QUESTS=[
 ];
 const DEFAULT_CATS={health:{lv:1,exp:0},mental:{lv:1,exp:0},family:{lv:1,exp:0},finance:{lv:1,exp:0},study:{lv:1,exp:0},work:{lv:1,exp:0}};
 
-const EXP_TABLE=[0,2,5,10,18,30,45,65,90,120,160,200,250,310,380,460,550,650,760,880,1000,
-  1150,1310,1480,1660,1850,2050,2260,2480,2710,2950,3200,3460,3730,4010,4300,4600,4910,5230,5560,5900,
-  6260,6630,7010,7400,7800,8210,8630,9060,9500,9950,10420,10900,11390,11890,12400,12920,13450,13990,14540,15100,
-  15680,16270,16870,17480,18100,18730,19370,20020,20680,21350,22030,22720,23420,24130,24850,25580,26320,27070,27830,28600,
-  29380,30170,30970,31780,32600,33430,34270,35120,35980,36850,37730,38620,39520,40430,41350,42280,43220,44170,45130,99999];
-function expForLv(lv){return lv>=100?99999:(EXP_TABLE[lv]||lv*10);}
+// Simplified EXP formula: need lv+1 to level up
+function expForLv(lv){return lv>=100?999:lv+1;}
 
 function lifeTitleForLv(lv){
   if(lv<5)return'견습 모험가';if(lv<10)return'초보 전사';if(lv<20)return'숙련 전사';
@@ -895,12 +986,20 @@ function confirmExp(){
     propagateCat(q.cat,prevLv);
   }
   const _qForCheer=state.quests.find(x=>x.id===activeQuestId);
-  closeModal();save();render();processQ();
-  if(_qForCheer){
-    const _ck=_qForCheer.cat;
-    const _cqs=state.quests.filter(x=>x.cat===_ck);
-    const _done=_cqs.filter(x=>getTodayLog(x)).length;
-    if(_done===_cqs.length-1&&_cqs.length>1)showCheer(_ck);
+  const _metaCheer=_qForCheer?CAT_META[_qForCheer.cat]:null;
+  closeModal();save();render();
+  // Show EXP reaction popup
+  if(_qForCheer&&_metaCheer){
+    const _maxExp=expForLv(_qForCheer.lv);
+    const _pct=Math.min(100,(_qForCheer.exp/_maxExp)*100);
+    const _isLvUp=lvQueue.length>0;
+    showExpReact(newExp,_qForCheer.name,_pct,_metaCheer.color,_isLvUp);
+    // Cheer check
+    const _cqs=state.quests.filter(x=>x.cat===_qForCheer.cat);
+    const _done=_cqs.filter(x=>getTodayLogs(x).length>0).length;
+    if(_done===_cqs.length-1&&_cqs.length>1)showCheer(_qForCheer.cat);
+  } else {
+    processQ();
   }
 }
 
@@ -1018,6 +1117,7 @@ function processQ(){
     evoWrap.style.display='none';
     document.getElementById('lvIcon').textContent=item.icon;
   }
+  playSound('levelup');
   document.getElementById('lvModal').classList.add('open');
   render();
 }
@@ -1093,12 +1193,14 @@ function yesterdayDateKey(){
 
 // Check if all quests completed today → grant ticket
 function checkDungeonTicket(){
-  const allDone=state.quests.every(q=>getTodayLogs(q).length>0);
+  // Each category must have at least 1 quest done today
+  const allDone=CAT_KEYS.every(k=>state.quests.filter(q=>q.cat===k).some(q=>getTodayLogs(q).length>0));
   const ticketEl=document.getElementById('dungeonTicket');
   if(allDone&&!state.dungeon?.ticketGrantedDate){
     if(!state.dungeon)state.dungeon={};
     state.dungeon.ticketGrantedDate=todayDateKey();
     ticketEl.style.display='block';
+    playSound('ticket');
     save();
   } else if(allDone&&state.dungeon?.ticketGrantedDate===todayDateKey()){
     ticketEl.style.display='block';
@@ -1141,6 +1243,12 @@ function renderDungeon(){
   } else {
     banner.style.display='none';
   }
+  // Toggle dungeon background
+  if(isDungeonActive()){
+    document.body.classList.add('dungeon-mode');
+  } else {
+    document.body.classList.remove('dungeon-mode');
+  }
   checkDungeonTicket();
 }
 
@@ -1149,6 +1257,7 @@ function hitMonster(){
   if(!isDungeonActive()||!state.dungeon.currentMonster)return;
   const m=state.dungeon.currentMonster;
   m.hp=Math.max(0,m.hp-1);
+  playSound('hit');
   save();
   renderDungeon();
   if(m.hp<=0){
@@ -1162,6 +1271,7 @@ function showDefeat(monsterKey){
   document.getElementById('defeatMonsterImg').innerHTML=`<img src="${mData.img}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;"/>`;
   document.getElementById('defeatExpTxt').textContent=`+${mData.exp} EXP 획득!`;
   document.getElementById('defeatOverlay').classList.add('open');
+  playSound('defeat');
   // Grant exp to life
   state.dungeon.defeatedDate=todayDateKey();
   propagateLife(mData.exp);
@@ -1188,6 +1298,7 @@ function checkPenalty(){
     state.dungeon.penaltyApplied=true;
     state.dungeon.currentMonster=null;
     save();
+    playSound('penalty');
     document.getElementById('penaltyOverlay').classList.add('open');
   }
 }
@@ -1198,6 +1309,117 @@ function closePenalty(){
 
 // Dungeon EXP multiplier
 function getDungeonExpMultiplier(){return isDungeonActive()?2:1;}
+
+// ── SOUND SYSTEM ──
+let soundEnabled = localStorage.getItem('gq_sound') !== 'off';
+function toggleSound(){
+  soundEnabled=!soundEnabled;
+  localStorage.setItem('gq_sound', soundEnabled?'on':'off');
+  document.getElementById('soundIcon').textContent=soundEnabled?'🔊':'🔇';
+}
+function initSoundIcon(){
+  document.getElementById('soundIcon').textContent=soundEnabled?'🔊':'🔇';
+}
+
+function playSound(type){
+  if(!soundEnabled)return;
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const play=(freq,dur,vol=0.3,wave='sine',delay=0)=>{
+      const o=ctx.createOscillator();
+      const g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type=wave;o.frequency.setValueAtTime(freq,ctx.currentTime+delay);
+      g.gain.setValueAtTime(vol,ctx.currentTime+delay);
+      g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+delay+dur);
+      o.start(ctx.currentTime+delay);
+      o.stop(ctx.currentTime+delay+dur);
+    };
+    if(type==='exp'){
+      // Bright coin sound
+      play(523,0.1,0.3,'sine');
+      play(659,0.1,0.3,'sine',0.08);
+      play(784,0.15,0.3,'sine',0.16);
+    } else if(type==='levelup'){
+      // Fanfare
+      play(523,0.12,0.35,'square');
+      play(659,0.12,0.35,'square',0.12);
+      play(784,0.12,0.35,'square',0.24);
+      play(1047,0.3,0.35,'square',0.36);
+    } else if(type==='hit'){
+      // Monster hit
+      play(150,0.05,0.4,'sawtooth');
+      play(100,0.08,0.3,'square',0.05);
+    } else if(type==='defeat'){
+      // Victory
+      play(392,0.1,0.3,'sine');
+      play(523,0.1,0.3,'sine',0.1);
+      play(659,0.1,0.3,'sine',0.2);
+      play(784,0.25,0.4,'sine',0.3);
+    } else if(type==='dungeon'){
+      // Dark dungeon enter
+      play(200,0.3,0.4,'sawtooth');
+      play(150,0.4,0.3,'sine',0.2);
+      play(100,0.5,0.2,'sine',0.4);
+    } else if(type==='penalty'){
+      // Sad descending
+      play(400,0.15,0.4,'square');
+      play(300,0.15,0.4,'square',0.15);
+      play(200,0.3,0.4,'square',0.3);
+    } else if(type==='ticket'){
+      // Magical ticket sound
+      play(880,0.1,0.3,'sine');
+      play(1109,0.1,0.3,'sine',0.1);
+      play(1319,0.2,0.3,'sine',0.2);
+    }
+  }catch(e){}
+}
+
+// ── EXP REACTION POPUP ──
+let expReactTimeout=null;
+function showExpReact(expGained, questName, newPct, catColor, isLevelUp){
+  const overlay=document.getElementById('expReactOverlay');
+  const numEl=document.getElementById('expReactNum');
+  const labelEl=document.getElementById('expReactBarLabel');
+  const fillEl=document.getElementById('expReactBarFill');
+  const pctEl=document.getElementById('expReactBarPct');
+
+  numEl.textContent=`+${expGained} EXP!`;
+  labelEl.textContent=questName;
+  fillEl.style.width='0%';
+  fillEl.style.background=catColor?`linear-gradient(90deg,${catColor}88,${catColor})`:'linear-gradient(90deg,var(--gold),#ffe080)';
+  pctEl.textContent='';
+
+  overlay.classList.add('open');
+  playSound('exp');
+
+  // Animate bar after brief delay
+  setTimeout(()=>{
+    const pct=Math.min(100,newPct);
+    fillEl.style.width=pct+'%';
+    pctEl.textContent=`${Math.round(pct)}%`;
+    if(isLevelUp){
+      setTimeout(()=>{
+        fillEl.style.width='100%';
+        setTimeout(()=>{
+          fillEl.style.transition='none';
+          fillEl.style.width='0%';
+          setTimeout(()=>{fillEl.style.transition='';},50);
+        },400);
+      },600);
+    }
+  },200);
+
+  // Auto close after 2s
+  if(expReactTimeout)clearTimeout(expReactTimeout);
+  expReactTimeout=setTimeout(closeExpReact, 2000);
+}
+function closeExpReact(){
+  document.getElementById('expReactOverlay').classList.remove('open');
+  if(expReactTimeout)clearTimeout(expReactTimeout);
+  // Process any queued level ups
+  processQ();
+}
 
 // VER BADGE TAP - 5 taps to reset
 let verTapCount=0,verTapTimer=null;
@@ -1228,7 +1450,7 @@ function executeReset(){
   location.reload();
 }
 
-load();checkPenalty();render();
+load();checkPenalty();render();initSoundIcon();
 // Show onboarding for first time users
 if(!localStorage.getItem('gq_onboard'))document.getElementById('onboardOverlay').classList.add('open');
 </script>
