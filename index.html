@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GoalQuest v0.15</title>
+<title>GoalQuest v0.16</title>
 <style>
 :root{
   --bg:#0a0818;--panel:rgba(20,18,45,0.92);--panel2:#181836;--border:#2a2858;
@@ -16,45 +16,52 @@
 /* ── BACKGROUND ── */
 body{
   color:var(--text);font-family:var(--body);min-height:100vh;
+  /* Village - warm sunset sky */
   background:
-    radial-gradient(ellipse at 20% 0%,rgba(120,60,200,0.35) 0%,transparent 50%),
-    radial-gradient(ellipse at 80% 0%,rgba(60,80,200,0.25) 0%,transparent 50%),
-    radial-gradient(ellipse at 50% 100%,rgba(80,30,150,0.2) 0%,transparent 60%),
-    linear-gradient(160deg,#0d0b20 0%,#120f2e 40%,#0f0d28 70%,#0a0818 100%);
+    radial-gradient(ellipse at 50% 0%,rgba(255,180,60,0.25) 0%,transparent 55%),
+    radial-gradient(ellipse at 20% 30%,rgba(255,140,40,0.15) 0%,transparent 45%),
+    radial-gradient(ellipse at 80% 20%,rgba(255,160,80,0.12) 0%,transparent 40%),
+    radial-gradient(ellipse at 50% 100%,rgba(60,80,160,0.2) 0%,transparent 50%),
+    linear-gradient(180deg,#1a1228 0%,#2a1a0e 25%,#1e1408 50%,#0e0c18 80%,#080616 100%);
   position:relative;
 }
-/* Star field */
+/* Village atmosphere - warm lights & stars */
 body::before{
   content:'';position:fixed;inset:0;z-index:0;
   background-image:
-    radial-gradient(1px 1px at 8% 12%,rgba(255,255,255,0.6) 0%,transparent 100%),
-    radial-gradient(1px 1px at 18% 35%,rgba(255,255,255,0.4) 0%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 28% 8%,rgba(255,255,255,0.5) 0%,transparent 100%),
-    radial-gradient(1px 1px at 38% 55%,rgba(255,255,255,0.3) 0%,transparent 100%),
-    radial-gradient(1px 1px at 48% 20%,rgba(255,255,255,0.5) 0%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 58% 42%,rgba(255,255,255,0.4) 0%,transparent 100%),
-    radial-gradient(1px 1px at 68% 15%,rgba(255,255,255,0.6) 0%,transparent 100%),
-    radial-gradient(1px 1px at 78% 68%,rgba(255,255,255,0.3) 0%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 88% 30%,rgba(255,255,255,0.5) 0%,transparent 100%),
-    radial-gradient(1px 1px at 95% 55%,rgba(255,255,255,0.4) 0%,transparent 100%),
-    radial-gradient(1px 1px at 5% 75%,rgba(255,255,255,0.3) 0%,transparent 100%),
-    radial-gradient(1px 1px at 22% 85%,rgba(255,255,255,0.4) 0%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 42% 78%,rgba(255,255,255,0.5) 0%,transparent 100%),
-    radial-gradient(1px 1px at 62% 90%,rgba(255,255,255,0.3) 0%,transparent 100%),
-    radial-gradient(1px 1px at 82% 82%,rgba(255,255,255,0.4) 0%,transparent 100%),
-    radial-gradient(1px 1px at 33% 48%,rgba(180,160,255,0.4) 0%,transparent 100%),
-    radial-gradient(1.5px 1.5px at 72% 22%,rgba(160,180,255,0.5) 0%,transparent 100%),
-    radial-gradient(1px 1px at 55% 65%,rgba(200,160,255,0.3) 0%,transparent 100%);
+    /* Warm stars */
+    radial-gradient(1.5px 1.5px at 8% 12%,rgba(255,220,150,0.7) 0%,transparent 100%),
+    radial-gradient(1px 1px at 18% 35%,rgba(255,255,200,0.5) 0%,transparent 100%),
+    radial-gradient(2px 2px at 28% 8%,rgba(255,230,160,0.6) 0%,transparent 100%),
+    radial-gradient(1px 1px at 42% 18%,rgba(255,220,150,0.5) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 58% 6%,rgba(255,255,200,0.6) 0%,transparent 100%),
+    radial-gradient(1px 1px at 72% 14%,rgba(255,230,160,0.4) 0%,transparent 100%),
+    radial-gradient(2px 2px at 85% 9%,rgba(255,220,150,0.6) 0%,transparent 100%),
+    radial-gradient(1px 1px at 92% 22%,rgba(255,255,200,0.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 15% 55%,rgba(255,220,150,0.3) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 35% 48%,rgba(255,255,200,0.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 65% 42%,rgba(255,230,160,0.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 88% 50%,rgba(255,220,150,0.35) 0%,transparent 100%),
+    /* Distant village lights */
+    radial-gradient(3px 3px at 25% 72%,rgba(255,200,80,0.5) 0%,transparent 100%),
+    radial-gradient(2px 2px at 45% 78%,rgba(255,180,60,0.4) 0%,transparent 100%),
+    radial-gradient(3px 3px at 68% 75%,rgba(255,200,80,0.45) 0%,transparent 100%),
+    radial-gradient(2px 2px at 78% 80%,rgba(255,180,60,0.35) 0%,transparent 100%);
   pointer-events:none;
 }
-/* Nebula glow */
+/* Village warm glow */
 body::after{
   content:'';position:fixed;inset:0;z-index:0;
   background:
-    radial-gradient(ellipse at 15% 25%,rgba(100,60,200,0.08) 0%,transparent 40%),
-    radial-gradient(ellipse at 85% 60%,rgba(60,100,200,0.06) 0%,transparent 40%),
-    radial-gradient(ellipse at 50% 80%,rgba(80,40,160,0.06) 0%,transparent 35%);
+    radial-gradient(ellipse at 50% 0%,rgba(255,160,60,0.08) 0%,transparent 40%),
+    radial-gradient(ellipse at 20% 70%,rgba(255,140,40,0.06) 0%,transparent 35%),
+    radial-gradient(ellipse at 80% 60%,rgba(255,160,60,0.05) 0%,transparent 30%);
   pointer-events:none;
+  animation:village-glow 4s ease-in-out infinite;
+}
+@keyframes village-glow{
+  0%,100%{opacity:1;}
+  50%{opacity:0.7;}
 }
 
 /* ── DUNGEON BACKGROUND ── */
@@ -319,6 +326,23 @@ body.dungeon-mode .wrap::before{
 .dungeon-ticket-txt{font-family:var(--pixel);font-size:8px;color:var(--gold);line-height:1.8;}
 
 /* Monster defeat overlay */
+/* Monster hit animation */
+.monster-hit{animation:monster-shake 0.4s ease-out;}
+@keyframes monster-shake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-8px) rotate(-5deg);}
+  40%{transform:translateX(8px) rotate(5deg);}
+  60%{transform:translateX(-5px);}
+  80%{transform:translateX(5px);}
+}
+/* Monster dissolve/pixelate */
+@keyframes monster-dissolve{
+  0%{opacity:1;filter:none;transform:scale(1);}
+  30%{filter:blur(1px);opacity:0.9;transform:scale(1.05);}
+  60%{filter:blur(2px) contrast(2);opacity:0.6;transform:scale(0.9);}
+  80%{filter:blur(4px);opacity:0.3;transform:scale(1.1);}
+  100%{opacity:0;filter:blur(8px);transform:scale(0.5);}
+}
 .defeat-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:250;justify-content:center;align-items:center;}
 .defeat-overlay.open{display:flex;}
 .defeat-box{text-align:center;animation:pop .4s cubic-bezier(.34,1.56,.64,1);}
@@ -348,6 +372,15 @@ body.dungeon-mode .wrap::before{
 .cal-day-num{font-size:12px;font-weight:700;margin-bottom:3px;}
 .cal-dots{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;justify-items:center;width:100%;}
 .cal-dot{width:7px;height:7px;border-radius:50%;}
+/* ── HELP ── */
+.help-item{border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;cursor:pointer;transition:border-color .2s;}
+.help-item:hover{border-color:rgba(255,255,255,.2);}
+.help-q{padding:12px 14px;font-weight:800;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+.help-q::after{content:"▼";font-size:10px;color:var(--text-dim);transition:transform .2s;}
+.help-item.open .help-q::after{transform:rotate(180deg);}
+.help-a{display:none;padding:0 14px 12px;font-size:12px;color:var(--text-dim);line-height:1.7;border-top:1px solid var(--border);}
+.help-item.open .help-a{display:block;}
+
 .cheer-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
   background:linear-gradient(135deg,rgba(30,28,60,.97),rgba(20,18,50,.97));
   border:1px solid rgba(245,200,66,.5);border-radius:14px;padding:14px 20px;
@@ -372,7 +405,7 @@ body.dungeon-mode .wrap::before{
   <div class="header">
     <h1>⚔ GOAL QUEST ⚔</h1>
     <div class="sub">나의 인생을 레벨업하라</div>
-    <div class="ver-badge" id="verBadge" onclick="handleVerTap()" style="cursor:pointer;user-select:none;">Ver.0.15</div>
+    <div class="ver-badge" id="verBadge" onclick="handleVerTap()" style="cursor:pointer;user-select:none;">Ver.0.16</div>
   </div>
 
   <!-- DASHBOARD -->
@@ -387,6 +420,52 @@ body.dungeon-mode .wrap::before{
         <div class="life-bar-w"><div class="life-bar-f" id="lifeBar" style="width:0%"></div></div>
       </div>
       <div class="cat-col" id="catRight"></div>
+    </div>
+    <!-- Dungeon torches (fixed, shown in dungeon mode) -->
+    <div id="dungeonTorches" style="display:none;pointer-events:none;">
+      <div style="position:fixed;top:60px;left:8px;z-index:2;">
+        <svg width="28" height="50" viewBox="0 0 28 50" xmlns="http://www.w3.org/2000/svg">
+          <!-- Torch handle -->
+          <rect x="11" y="28" width="6" height="22" rx="2" fill="#6b3a1f"/>
+          <rect x="9" y="24" width="10" height="8" rx="2" fill="#8b4a2f"/>
+          <!-- Flame -->
+          <ellipse cx="14" cy="18" rx="7" ry="10" fill="#ff8c00" opacity="0.9">
+            <animate attributeName="rx" values="7;5;8;6;7" dur="0.6s" repeatCount="indefinite"/>
+            <animate attributeName="ry" values="10;12;9;11;10" dur="0.6s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="14" cy="16" rx="4" ry="7" fill="#ff4500">
+            <animate attributeName="rx" values="4;3;5;4;4" dur="0.5s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="16;14;17;15;16" dur="0.5s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="14" cy="13" rx="2" ry="4" fill="#ffcc00">
+            <animate attributeName="ry" values="4;6;3;5;4" dur="0.4s" repeatCount="indefinite"/>
+          </ellipse>
+          <!-- Glow -->
+          <ellipse cx="14" cy="18" rx="12" ry="14" fill="rgba(255,140,0,0.15)">
+            <animate attributeName="rx" values="12;10;14;11;12" dur="0.7s" repeatCount="indefinite"/>
+          </ellipse>
+        </svg>
+      </div>
+      <div style="position:fixed;top:60px;right:8px;z-index:2;">
+        <svg width="28" height="50" viewBox="0 0 28 50" xmlns="http://www.w3.org/2000/svg">
+          <rect x="11" y="28" width="6" height="22" rx="2" fill="#6b3a1f"/>
+          <rect x="9" y="24" width="10" height="8" rx="2" fill="#8b4a2f"/>
+          <ellipse cx="14" cy="18" rx="7" ry="10" fill="#ff8c00" opacity="0.9">
+            <animate attributeName="rx" values="6;8;5;7;6" dur="0.7s" repeatCount="indefinite"/>
+            <animate attributeName="ry" values="10;8;12;10;10" dur="0.7s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="14" cy="16" rx="4" ry="7" fill="#ff4500">
+            <animate attributeName="rx" values="3;5;4;3;3" dur="0.6s" repeatCount="indefinite"/>
+            <animate attributeName="cy" values="15;17;14;16;15" dur="0.6s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="14" cy="13" rx="2" ry="4" fill="#ffcc00">
+            <animate attributeName="ry" values="5;3;6;4;5" dur="0.5s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="14" cy="18" rx="12" ry="14" fill="rgba(255,140,0,0.15)">
+            <animate attributeName="rx" values="11;13;10;12;11" dur="0.8s" repeatCount="indefinite"/>
+          </ellipse>
+        </svg>
+      </div>
     </div>
     <!-- Dungeon ticket notification -->
     <div class="dungeon-ticket" id="dungeonTicket">
@@ -422,6 +501,7 @@ body.dungeon-mode .wrap::before{
   <button class="nav-btn active" id="nav-dashboard" onclick="showPage('dashboard')"><span class="nav-icon">⚔️</span><span>퀘스트</span></button>
   <button class="nav-btn" id="nav-journal" onclick="showPage('journal')"><span class="nav-icon">📅</span><span>실행일지</span></button>
   <button class="nav-btn" id="nav-sound" onclick="toggleSound()"><span class="nav-icon" id="soundIcon">🔊</span><span>사운드</span></button>
+  <button class="nav-btn" id="nav-help" onclick="showHelp()"><span class="nav-icon">❓</span><span>도움말</span></button>
 </div>
 
 <!-- ONBOARDING -->
@@ -538,13 +618,51 @@ body.dungeon-mode .wrap::before{
   </div>
 </div>
 
+<!-- DUNGEON BATTLE OVERLAY (quest execution in dungeon) -->
+<div class="defeat-overlay" id="battleOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:180;justify-content:center;align-items:center;" onclick="closeBattle()">
+  <div style="text-align:center;animation:pop .3s cubic-bezier(.34,1.56,.64,1);max-width:320px;width:90%;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:30px;margin-bottom:20px;">
+      <!-- Knight -->
+      <div id="battleKnight" style="width:80px;height:80px;image-rendering:pixelated;"></div>
+      <!-- VS -->
+      <div style="font-family:var(--pixel);font-size:12px;color:#ef4444;text-shadow:0 0 10px rgba(239,68,68,.6);">VS</div>
+      <!-- Monster -->
+      <div id="battleMonster" style="width:80px;height:80px;image-rendering:pixelated;" class="monster-hit"></div>
+    </div>
+    <!-- HP bar -->
+    <div style="font-family:var(--pixel);font-size:7px;color:#ef4444;margin-bottom:4px;" id="battleMonsterName"></div>
+    <div style="height:12px;background:rgba(255,255,255,.08);border-radius:6px;border:1px solid rgba(239,68,68,.3);overflow:hidden;margin-bottom:6px;">
+      <div id="battleHpBar" style="height:100%;background:linear-gradient(90deg,#b91c1c,#ef4444);border-radius:6px;transition:width .5s ease;"></div>
+    </div>
+    <div style="font-family:var(--pixel);font-size:7px;color:rgba(239,68,68,.7);" id="battleHpTxt"></div>
+    <div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:16px;animation:blink 1.5s infinite;">탭하면 계속</div>
+  </div>
+</div>
+
 <!-- MONSTER DEFEAT -->
 <div class="defeat-overlay" id="defeatOverlay">
   <div class="defeat-box">
-    <div class="defeat-monster" id="defeatMonsterImg"></div>
-    <div class="defeat-title">⚔️ 몬스터 처치!</div>
+    <div class="defeat-monster" id="defeatMonsterImg" style="animation:monster-dissolve 0.8s ease-out forwards;"></div>
+    <div class="defeat-title" style="font-size:24px;">⚔️ 몬스터를 처치했다!!</div>
     <div class="defeat-exp" id="defeatExpTxt">+0 EXP 획득!</div>
     <button class="defeat-close" onclick="closeDefeat()">CONTINUE ▶</button>
+  </div>
+</div>
+
+<!-- DUNGEON EXPLORE MORE -->
+<div class="defeat-overlay" id="exploreMoreOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:190;justify-content:center;align-items:center;">
+  <div style="text-align:center;animation:pop .3s cubic-bezier(.34,1.56,.64,1);max-width:340px;width:90%;padding:10px;">
+    <div style="font-size:36px;margin-bottom:12px;">🏰</div>
+    <div style="font-family:var(--pixel);font-size:11px;color:var(--gold);margin-bottom:14px;line-height:1.8;">던전을 더 탐험할까요?</div>
+    <div style="font-size:12px;color:#ef4444;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:10px 14px;margin-bottom:20px;line-height:1.7;">
+      ⚠️ 오늘이 지나기 전에 몬스터를 처치하지 못하면<br>
+      캐릭터 경험치가 줄어들고<br>
+      내일의 던전 입장 티켓도 받지 못해요!
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="exploreDungeon()" style="flex:1;font-family:var(--pixel);font-size:8px;background:linear-gradient(135deg,#b91c1c,#ef4444);color:#fff;border:none;padding:14px;border-radius:10px;cursor:pointer;box-shadow:0 4px 14px rgba(239,68,68,.4);">⚔️ 계속 탐험!</button>
+      <button onclick="leaveDungeon()" style="flex:1;font-family:var(--pixel);font-size:8px;background:rgba(255,255,255,.07);color:var(--text-dim);border:1px solid var(--border);padding:14px;border-radius:10px;cursor:pointer;">🚪 던전 나가기</button>
+    </div>
   </div>
 </div>
 
@@ -564,6 +682,53 @@ body.dungeon-mode .wrap::before{
     <div class="cal-detail-title" id="calDetailTitle"></div>
     <div id="calDetailBody"></div>
     <button class="cal-close" onclick="closeCalDetail()">닫기</button>
+  </div>
+</div>
+
+<!-- HELP MODAL -->
+<div class="modal-overlay" id="helpModal">
+  <div class="modal" style="max-width:460px;">
+    <button class="modal-close-x" onclick="closeHelp()">✕</button>
+    <div class="modal-title">❓ 도움말</div>
+    <div style="margin-top:14px;">
+      <!-- Accordion items -->
+      <div class="help-item" onclick="toggleHelp(0)">
+        <div class="help-q">🎮 GoalQuest란 무엇인가요?</div>
+        <div class="help-a" id="help-a-0">매일의 목표를 RPG 게임처럼 관리하는 앱이에요. 활동을 기록할 때마다 경험치가 쌓이고 레벨이 올라가며, 캐릭터가 점점 성장해요. 하루하루 열심히 사는 나 자신을 레벨업하는 게 목표예요! ⚔️</div>
+      </div>
+      <div class="help-item" onclick="toggleHelp(1)">
+        <div class="help-q">⭐ 캐릭터 레벨은 어떻게 올려요?</div>
+        <div class="help-a" id="help-a-1">Active Quest의 [EXP UP] 버튼을 눌러 오늘 실행한 내용을 기록하면 경험치가 쌓여요.<br><br>Quest 레벨업 → 카테고리 경험치 증가 → 카테고리 레벨업 → 인생레벨 경험치 증가 순서로 연결돼요.<br><br>기본 경험치는 1, 1시간 이상 투자했다면 +2 버튼을 눌러주세요!</div>
+      </div>
+      <div class="help-item" onclick="toggleHelp(2)">
+        <div class="help-q">📋 Active Quest를 수정하고 싶을 때는?</div>
+        <div class="help-a" id="help-a-2">각 퀘스트 오른쪽의 ⚙️ 버튼을 탭하면 설정 화면이 열려요.<br><br>• 퀘스트 이름 변경<br>• 자주 쓰는 항목 등록/수정 (최대 3개)<br>• 퀘스트 삭제<br><br>카테고리 아래 "새 퀘스트 추가..." 입력칸으로 새 퀘스트도 추가할 수 있어요.</div>
+      </div>
+      <div class="help-item" onclick="toggleHelp(3)">
+        <div class="help-q">🏰 던전은 어떻게 입장해요?</div>
+        <div class="help-a" id="help-a-3">모든 카테고리에서 각 1개 이상의 퀘스트를 실행하면 🎫 던전 입장권이 생겨요.<br><br>다음 날 앱을 열면 던전 모드가 활성화되고 몬스터가 등장해요!<br><br>⚠️ 던전에 입장한 날 자정까지 몬스터를 처치하지 못하면 모든 카테고리 EXP가 -1 줄어들어요.</div>
+      </div>
+      <div class="help-item" onclick="toggleHelp(4)">
+        <div class="help-q">⭐ 자주 쓰는 항목은 어떻게 등록해요?</div>
+        <div class="help-a" id="help-a-4">두 가지 방법이 있어요.<br><br>1. EXP UP 버튼 → 메모 입력 → "⭐ 자주 쓰는 항목으로 저장" 체크 후 입력 완료<br><br>2. ⚙️ 설정 버튼 → 빠른입력 항목에서 직접 추가<br><br>등록된 항목은 EXP UP 버튼을 눌렀을 때 버튼으로 바로 선택할 수 있어요. (최대 3개)</div>
+      </div>
+      <div class="help-item" onclick="toggleHelp(5)">
+        <div class="help-q">📅 실행일지는 어디서 봐요?</div>
+        <div class="help-a" id="help-a-5">하단 네비의 📅 실행일지 탭을 누르면 달력이 나와요.<br><br>퀘스트를 실행한 날에는 카테고리 색깔 점이 표시되고, 날짜를 탭하면 그날의 상세 기록을 확인할 수 있어요.</div>
+      </div>
+      <div class="help-item" onclick="toggleHelp(6)">
+        <div class="help-q">🆕 업데이트 내용</div>
+        <div class="help-a" id="help-a-6" style="font-size:11px;line-height:1.8;">
+          <b style="color:var(--gold)">Ver.0.16</b> 던전 전투 연출 강화, 마을/동굴 배경, 도움말 추가<br>
+          <b style="color:var(--gold)">Ver.0.16</b> EXP 리액션 팝업, 사운드 시스템, 던전 시스템<br>
+          <b style="color:var(--gold)">Ver.0.14</b> 몬스터 등장, 던전 입장권, 퀘스트 이름 수정<br>
+          <b style="color:var(--gold)">Ver.0.13</b> 픽셀아트 캐릭터(Lv.1~9), 진화 연출, 응원 팝업<br>
+          <b style="color:var(--gold)">Ver.0.12</b> 대시보드 레이아웃, 실행일지 달력, 자주쓰는 항목<br>
+          <b style="color:var(--gold)">Ver.0.11</b> 카테고리 6개, 경험치 곡선, 오늘 실행 표시<br>
+          <b style="color:var(--gold)">Ver.0.1</b> 기본 경험치/레벨 시스템 출시
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -616,8 +781,8 @@ const DEFAULT_QUESTS=[
 ];
 const DEFAULT_CATS={health:{lv:1,exp:0},mental:{lv:1,exp:0},family:{lv:1,exp:0},finance:{lv:1,exp:0},study:{lv:1,exp:0},work:{lv:1,exp:0}};
 
-// Simplified EXP formula: need lv+1 to level up
-function expForLv(lv){return lv>=100?999:lv+1;}
+// EXP formula: lv*2
+function expForLv(lv){return lv>=100?999:lv*2;}
 
 function lifeTitleForLv(lv){
   if(lv<5)return'견습 모험가';if(lv<10)return'초보 전사';if(lv<20)return'숙련 전사';
@@ -723,6 +888,9 @@ function load(){
         });
       });
       CAT_KEYS.forEach(k=>{if(state.collapsed['q_'+k]===undefined)state.collapsed['q_'+k]=true;});
+      // Cap exp to prevent bar overflow (old data migration)
+      state.quests.forEach(q=>{if(q.exp>=expForLv(q.lv))q.exp=expForLv(q.lv)-1;});
+      CAT_KEYS.forEach(k=>{const cat=state.cats[k];if(cat.exp>=expForLv(cat.lv))cat.exp=expForLv(cat.lv)-1;});
       return;
     }
   }catch(e){}
@@ -935,7 +1103,7 @@ function openModal(id){
 function selectPreset(i){
   const q=state.quests.find(x=>x.id===activeQuestId);
   const p=q.presets[i];
-  document.getElementById('expInput').value=p.exp;
+  document.getElementById('expInput').value=1; // Always default to 1
   document.getElementById('memoInput').value=p.memo;
 }
 function closeModal(){document.getElementById('expModal').classList.remove('open');activeQuestId=null;}
@@ -990,14 +1158,22 @@ function confirmExp(){
   closeModal();save();render();
   // Show EXP reaction popup
   if(_qForCheer&&_metaCheer){
-    const _maxExp=expForLv(_qForCheer.lv);
-    const _pct=Math.min(100,(_qForCheer.exp/_maxExp)*100);
-    const _isLvUp=lvQueue.length>0;
-    showExpReact(newExp,_qForCheer.name,_pct,_metaCheer.color,_isLvUp);
-    // Cheer check
-    const _cqs=state.quests.filter(x=>x.cat===_qForCheer.cat);
-    const _done=_cqs.filter(x=>getTodayLogs(x).length>0).length;
-    if(_done===_cqs.length-1&&_cqs.length>1)showCheer(_qForCheer.cat);
+    if(isDungeonActive()){
+      // Dungeon mode: skip EXP react, battle animation already shown
+      const _cqs=state.quests.filter(x=>x.cat===_qForCheer.cat);
+      const _done=_cqs.filter(x=>getTodayLogs(x).length>0).length;
+      if(_done===_cqs.length-1&&_cqs.length>1)showCheer(_qForCheer.cat);
+      processQ();
+    } else {
+      const _maxExp=expForLv(_qForCheer.lv);
+      const _pct=Math.min(100,(_qForCheer.exp/_maxExp)*100);
+      const _isLvUp=lvQueue.length>0;
+      showExpReact(newExp,_qForCheer.name,_pct,_metaCheer.color,_isLvUp);
+      // Cheer check
+      const _cqs=state.quests.filter(x=>x.cat===_qForCheer.cat);
+      const _done=_cqs.filter(x=>getTodayLogs(x).length>0).length;
+      if(_done===_cqs.length-1&&_cqs.length>1)showCheer(_qForCheer.cat);
+    }
   } else {
     processQ();
   }
@@ -1243,11 +1419,14 @@ function renderDungeon(){
   } else {
     banner.style.display='none';
   }
-  // Toggle dungeon background
+  // Toggle dungeon background and torches
+  const torches=document.getElementById('dungeonTorches');
   if(isDungeonActive()){
     document.body.classList.add('dungeon-mode');
+    if(torches)torches.style.display='block';
   } else {
     document.body.classList.remove('dungeon-mode');
+    if(torches)torches.style.display='none';
   }
   checkDungeonTicket();
 }
@@ -1260,25 +1439,82 @@ function hitMonster(){
   playSound('hit');
   save();
   renderDungeon();
+  // Show battle overlay
+  showBattle(m.key, m.hp, m.maxHp);
   if(m.hp<=0){
-    // Monster defeated!
-    setTimeout(()=>showDefeat(m.key),400);
+    // Monster defeated - close battle then show defeat
+    setTimeout(()=>{
+      closeBattle();
+      setTimeout(()=>showDefeat(m.key),300);
+    },1200);
   }
+}
+
+function showBattle(monsterKey, hp, maxHp){
+  const mData=MONSTERS[monsterKey];
+  const overlay=document.getElementById('battleOverlay');
+  document.getElementById('battleKnight').innerHTML=knightSVG(state.life.lv);
+  // Monster with shake animation
+  const monsterEl=document.getElementById('battleMonster');
+  monsterEl.innerHTML=`<img src="${mData.img}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;"/>`;
+  monsterEl.className='monster-hit';
+  // Reset animation
+  void monsterEl.offsetWidth;
+  monsterEl.className='monster-hit';
+  document.getElementById('battleMonsterName').textContent=mData.name;
+  const pct=Math.max(0,(hp/maxHp)*100);
+  document.getElementById('battleHpBar').style.width=pct+'%';
+  document.getElementById('battleHpTxt').textContent=`HP ${hp} / ${maxHp}`;
+  overlay.style.display='flex';
+  // Auto close after 1.5s if monster alive
+  if(hp>0){
+    clearTimeout(window._battleTimer);
+    window._battleTimer=setTimeout(closeBattle,1500);
+  }
+}
+function closeBattle(){
+  clearTimeout(window._battleTimer);
+  document.getElementById('battleOverlay').style.display='none';
 }
 
 function showDefeat(monsterKey){
   const mData=MONSTERS[monsterKey];
-  document.getElementById('defeatMonsterImg').innerHTML=`<img src="${mData.img}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;"/>`;
+  // Dissolve animation on monster img
+  const monsterImgEl=document.getElementById('defeatMonsterImg');
+  monsterImgEl.innerHTML=`<img src="${mData.img}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;animation:monster-dissolve 0.8s ease-out 0.3s forwards;"/>`;
   document.getElementById('defeatExpTxt').textContent=`+${mData.exp} EXP 획득!`;
   document.getElementById('defeatOverlay').classList.add('open');
   playSound('defeat');
   // Grant exp to life
   state.dungeon.defeatedDate=todayDateKey();
+  // Clear current monster so next can be picked
+  state.dungeon.lastDefeatedKey=monsterKey;
+  state.dungeon.currentMonster=null;
   propagateLife(mData.exp);
   save();render();
 }
 function closeDefeat(){
   document.getElementById('defeatOverlay').classList.remove('open');
+  // Show explore more dialog
+  setTimeout(()=>{
+    document.getElementById('exploreMoreOverlay').style.display='flex';
+  },200);
+}
+function exploreDungeon(){
+  document.getElementById('exploreMoreOverlay').style.display='none';
+  // Pick new random monster
+  const key=MONSTER_KEYS[Math.floor(Math.random()*MONSTER_KEYS.length)];
+  const m=MONSTERS[key];
+  state.dungeon.currentMonster={key,hp:m.maxHp,maxHp:m.maxHp};
+  state.dungeon.defeatedDate=null; // Allow new defeat
+  save();render();
+}
+function leaveDungeon(){
+  document.getElementById('exploreMoreOverlay').style.display='none';
+  // Mark dungeon as completed for today (no penalty)
+  if(!state.dungeon.defeatedDate)state.dungeon.defeatedDate=todayDateKey();
+  state.dungeon.currentMonster=null;
+  save();render();
 }
 
 // Check penalty at midnight (next day load with undefeated monster)
@@ -1419,6 +1655,18 @@ function closeExpReact(){
   if(expReactTimeout)clearTimeout(expReactTimeout);
   // Process any queued level ups
   processQ();
+}
+
+// ── HELP SYSTEM ──
+function showHelp(){
+  document.getElementById('helpModal').classList.add('open');
+}
+function closeHelp(){
+  document.getElementById('helpModal').classList.remove('open');
+}
+function toggleHelp(i){
+  const item=document.querySelectorAll('.help-item')[i];
+  item.classList.toggle('open');
 }
 
 // VER BADGE TAP - 5 taps to reset
