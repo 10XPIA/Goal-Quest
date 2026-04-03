@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GoalQuest v0.17</title>
+<title>Life Heroes</title>
 <style>
 :root{
   --bg:#0a0818;--panel:rgba(20,18,45,0.92);--panel2:#181836;--border:#2a2858;
@@ -385,6 +385,18 @@ body.dungeon-mode .wrap::before{
 .cal-day-num{font-size:12px;font-weight:700;margin-bottom:3px;}
 .cal-dots{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;justify-items:center;width:100%;}
 .cal-dot{width:7px;height:7px;border-radius:50%;}
+/* ── CATEGORY SELECT ── */
+.cat-select-card{
+  background:var(--panel);border:2px solid var(--border);border-radius:12px;
+  padding:12px;cursor:pointer;transition:all .2s;text-align:center;
+  user-select:none;
+}
+.cat-select-card:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04);}
+.cat-select-card.selected{border-width:2.5px;box-shadow:0 0 12px;}
+.cat-select-icon{font-size:28px;margin-bottom:6px;}
+.cat-select-name{font-weight:800;font-size:14px;margin-bottom:4px;}
+.cat-select-desc{font-size:10px;color:var(--text-dim);line-height:1.5;}
+
 /* ── HELP ── */
 .help-item{border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;cursor:pointer;transition:border-color .2s;}
 .help-item:hover{border-color:rgba(255,255,255,.2);}
@@ -416,9 +428,9 @@ body.dungeon-mode .wrap::before{
 <body>
 <div class="wrap">
   <div class="header">
-    <h1>⚔ GOAL QUEST ⚔</h1>
+    <h1>⚔ LIFE HEROES ⚔</h1>
     <div class="sub">나의 인생을 레벨업하라</div>
-    <div class="ver-badge" id="verBadge" onclick="handleVerTap()" style="cursor:pointer;user-select:none;">Ver.0.17</div>
+    <div class="ver-badge" id="verBadge" onclick="handleVerTap()" style="cursor:pointer;user-select:none;">Ver.0.18</div>
   </div>
 
   <!-- DASHBOARD -->
@@ -480,10 +492,7 @@ body.dungeon-mode .wrap::before{
         </svg>
       </div>
     </div>
-    <!-- Dungeon ticket notification -->
-    <div class="dungeon-ticket" id="dungeonTicket">
-      <div class="dungeon-ticket-txt">🎫 던전 입장권 획득!<br>내일 던전에 입장할 수 있어요!</div>
-    </div>
+    <!-- dungeonTicket removed - handled by dungeonProgressBar -->
     <!-- Active dungeon banner -->
     <div class="dungeon-banner" id="dungeonBanner" style="display:none;">
       <div class="dungeon-monster" id="dungeonMonsterImg"></div>
@@ -497,6 +506,15 @@ body.dungeon-mode .wrap::before{
     <!-- Dungeon progress status -->
     <div id="dungeonProgressBar" style="margin-bottom:12px;padding:14px 16px;border-radius:12px;text-align:center;font-weight:800;font-size:15px;line-height:1.5;transition:all .3s;"></div>
     <div class="section-hd">ACTIVE QUESTS</div>
+    <!-- Quest guide for fresh start -->
+    <div id="questGuide" style="display:none;background:var(--panel);border:1px dashed rgba(245,200,66,.4);border-radius:12px;padding:16px 18px;margin-bottom:12px;">
+      <div style="font-family:var(--pixel);font-size:9px;color:var(--gold);margin-bottom:10px;">✨ 퀘스트를 추가해보세요!</div>
+      <div style="font-size:13px;color:var(--text-dim);line-height:1.8;margin-bottom:12px;">
+        각 카테고리를 펼쳐서 매일 실행할 퀘스트를 추가하세요.<br>
+        아래처럼 입력하면 돼요!
+      </div>
+      <div id="questGuideExamples" style="display:flex;flex-direction:column;gap:6px;"></div>
+    </div>
     <div id="questSections"></div>
   </div>
 
@@ -520,29 +538,37 @@ body.dungeon-mode .wrap::before{
 </div>
 
 <!-- ONBOARDING -->
+<!-- ONBOARDING: STEP 1 - Welcome -->
 <div class="onboard-overlay" id="onboardOverlay">
   <div class="onboard-box">
-    <div class="onboard-title">⚔ GOAL QUEST ⚔</div>
-    <div class="onboard-sub">매일의 목표를 레벨업하라!</div>
+    <div class="onboard-title">⚔ LIFE HEROES ⚔</div>
+    <div class="onboard-sub">매일의 루틴으로 인생을 레벨업하라!</div>
     <div class="onboard-steps">
       <div class="onboard-step">
         <div class="onboard-step-num">1</div>
-        <div class="onboard-step-text">아래 <strong>ACTIVE QUESTS</strong>에서 카테고리를 탭해서 펼쳐보세요.</div>
+        <div class="onboard-step-text">내 인생에서 중요한 <strong>카테고리를 선택</strong>하고 매일 실행할 퀘스트를 기록해요.</div>
       </div>
       <div class="onboard-step">
         <div class="onboard-step-num">2</div>
-        <div class="onboard-step-text">오늘 실행한 항목의 <strong>EXP UP 버튼</strong>을 눌러 경험치를 기록하세요.</div>
+        <div class="onboard-step-text">실행할 때마다 <strong>EXP UP!</strong> 경험치가 쌓이고 레벨이 올라가요.</div>
       </div>
       <div class="onboard-step">
         <div class="onboard-step-num">3</div>
-        <div class="onboard-step-text">경험치가 쌓이면 <strong>레벨업!</strong> 캐릭터가 점점 강해져요 ⚔️</div>
-      </div>
-      <div class="onboard-step">
-        <div class="onboard-step-num">4</div>
-        <div class="onboard-step-text"><strong>실행일지</strong>에서 내가 열심히 살아온 기록을 달력으로 확인할 수 있어요 📅</div>
+        <div class="onboard-step-text">모든 카테고리를 실행하면 <strong>던전 입장권</strong> 획득! 몬스터를 처치해요 ⚔️</div>
       </div>
     </div>
-    <button class="onboard-btn" onclick="closeOnboard()">시작하기 ▶</button>
+    <button class="onboard-btn" onclick="goToCatSelect()">카테고리 선택하기 ▶</button>
+  </div>
+</div>
+
+<!-- ONBOARDING: STEP 2 - Category Select -->
+<div class="onboard-overlay" id="catSelectOverlay" style="display:none;">
+  <div class="onboard-box" style="max-width:500px;">
+    <div class="onboard-title" style="font-size:9px;">카테고리 선택</div>
+    <div class="onboard-sub">내 인생에서 중요한 영역을 3~6개 선택해요</div>
+    <div id="catSelectGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;"></div>
+    <div id="catSelectCount" style="font-family:var(--pixel);font-size:11px;color:var(--text-dim);text-align:center;margin-bottom:14px;letter-spacing:1px;"></div>
+    <button class="onboard-btn" id="catSelectBtn" onclick="completeCatSelect()" disabled style="opacity:.4;">모험 시작! ▶</button>
   </div>
 </div>
 
@@ -555,23 +581,23 @@ body.dungeon-mode .wrap::before{
     <div id="modalModeNote" style="display:none;font-size:11px;color:#facc15;background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.2);border-radius:6px;padding:6px 10px;margin-bottom:12px;text-align:center;"></div>
     <div id="presetArea"></div>
     <div class="field-wrap">
-      <label class="field-label">실행 내용 메모</label>
-      <textarea id="memoInput" placeholder="오늘 무엇을 했나요?"></textarea>
-    </div>
-    <div class="field-wrap">
-      <label class="field-label" id="expLabel">경험치</label>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <input type="number" id="expInput" min="1" placeholder="1" style="flex:1" readonly tabindex="-1" onclick="this.blur()"/>
-        <button onclick="document.getElementById('expInput').value=2" style="font-family:var(--pixel);font-size:7px;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.4);color:var(--gold);padding:10px 10px;border-radius:8px;cursor:pointer;white-space:nowrap;line-height:1.4;" id="oneHourBtn">1시간<br>이상 +2</button>
-      </div>
+      <label class="field-label" style="font-size:11px;">실행 내용 메모</label>
+      <textarea id="memoInput" placeholder="오늘 무엇을 했나요?" style="font-size:16px;height:70px;"></textarea>
     </div>
     <div id="savePresetRow" class="save-preset-row">
       <input type="checkbox" id="savePresetCheck"/>
-      <label for="savePresetCheck">⭐ 자주 쓰는 항목으로 저장</label>
+      <label for="savePresetCheck" style="font-size:14px;">⭐ 자주 쓰는 항목으로 저장</label>
+    </div>
+    <div class="field-wrap" style="margin-top:10px;">
+      <label class="field-label" id="expLabel" style="font-size:11px;">경험치</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="number" id="expInput" min="1" placeholder="1" style="flex:1;font-size:22px;" readonly tabindex="-1" onclick="this.blur()"/>
+        <button onclick="document.getElementById('expInput').value=2" style="font-family:var(--pixel);font-size:9px;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.4);color:var(--gold);padding:12px 12px;border-radius:8px;cursor:pointer;white-space:nowrap;line-height:1.6;" id="oneHourBtn">1시간<br>이상 +2</button>
+      </div>
     </div>
     <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeModal()">취소</button>
-      <button class="btn-confirm" onclick="confirmExp()">입력 완료</button>
+      <button class="btn-cancel" onclick="closeModal()" style="font-size:12px;padding:14px 18px;">취소</button>
+      <button class="btn-confirm" onclick="confirmExp()" style="font-size:10px;padding:14px;">입력 완료</button>
     </div>
   </div>
 </div>
@@ -676,11 +702,11 @@ body.dungeon-mode .wrap::before{
 @keyframes monster-appear-in in CSS
 
 <!-- TICKET POPUP -->
-<div class="defeat-overlay" id="ticketPopupOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:195;justify-content:center;align-items:center;" onclick="closeTicketPopup()">
-  <div style="text-align:center;animation:pop 0.4s cubic-bezier(.34,1.56,.64,1);">
-    <div style="font-size:80px;margin-bottom:16px;animation:ticket-spin 0.6s ease-out;">🎫</div>
-    <div style="font-family:var(--pixel);font-size:18px;color:var(--gold);text-shadow:0 0 30px rgba(245,200,66,.9);margin-bottom:10px;line-height:1.6;">던전 입장권 획득!!</div>
-    <div style="font-size:14px;color:var(--text-dim);margin-bottom:24px;line-height:1.7;">오늘의 모든 카테고리를 완료했어요!<br>내일 던전에 입장할 수 있어요! ⚔️</div>
+<div class="exp-react-overlay" id="ticketPopupOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);z-index:195;justify-content:center;align-items:center;" onclick="closeTicketPopup()">
+  <div style="text-align:center;padding:40px 30px;animation:exp-react-in 0.4s cubic-bezier(.34,1.56,.64,1);min-width:280px;">
+    <div style="font-size:90px;margin-bottom:16px;animation:ticket-spin 0.6s ease-out;">🎫</div>
+    <div style="font-family:var(--pixel);font-size:22px;color:var(--gold);text-shadow:0 0 30px rgba(245,200,66,.9),0 0 60px rgba(245,200,66,.5);margin-bottom:14px;line-height:1.6;">던전 입장권<br>획득!!</div>
+    <div style="font-size:14px;color:var(--text-dim);margin-bottom:24px;line-height:1.8;">오늘의 모든 카테고리를 완료했어요!<br>내일 던전에 입장할 수 있어요! ⚔️</div>
     <div style="font-size:11px;color:rgba(255,255,255,.3);animation:blink 1.5s infinite;">탭하면 계속</div>
   </div>
 </div>
@@ -725,12 +751,12 @@ body.dungeon-mode .wrap::before{
 <div class="modal-overlay" id="helpModal">
   <div class="modal" style="max-width:460px;">
     <button class="modal-close-x" onclick="closeHelp()">✕</button>
-    <div class="modal-title">❓ 도움말</div>
+    <div class="modal-title">❓ 도움말 — LIFE HEROES</div>
     <div style="margin-top:14px;">
       <!-- Accordion items -->
       <div class="help-item" onclick="toggleHelp(0)">
-        <div class="help-q">🎮 GoalQuest란 무엇인가요?</div>
-        <div class="help-a" id="help-a-0">매일의 목표를 RPG 게임처럼 관리하는 앱이에요. 활동을 기록할 때마다 경험치가 쌓이고 레벨이 올라가며, 캐릭터가 점점 성장해요. 하루하루 열심히 사는 나 자신을 레벨업하는 게 목표예요! ⚔️</div>
+        <div class="help-q">🎮 Life Heroes란 무엇인가요?</div>
+        <div class="help-a" id="help-a-0">매일의 루틴을 RPG 게임처럼 관리하는 앱이에요. 활동을 기록할 때마다 경험치가 쌓이고 레벨이 올라가며, 캐릭터가 점점 성장해요. 하루하루 열심히 사는 나 자신을 영웅으로 만들어가는 게 목표예요! ⚔️</div>
       </div>
       <div class="help-item" onclick="toggleHelp(1)">
         <div class="help-q">⭐ 캐릭터 레벨은 어떻게 올려요?</div>
@@ -755,8 +781,8 @@ body.dungeon-mode .wrap::before{
       <div class="help-item" onclick="toggleHelp(6)">
         <div class="help-q">🆕 업데이트 내용</div>
         <div class="help-a" id="help-a-6" style="font-size:11px;line-height:1.8;">
-          <b style="color:var(--gold)">Ver.0.17</b> 던전 전투 연출 강화, 마을/동굴 배경, 도움말 추가<br>
-          <b style="color:var(--gold)">Ver.0.17</b> EXP 리액션 팝업, 사운드 시스템, 던전 시스템<br>
+          <b style="color:var(--gold)">Ver.0.18</b> 던전 전투 연출 강화, 마을/동굴 배경, 도움말 추가<br>
+          <b style="color:var(--gold)">Ver.0.18</b> EXP 리액션 팝업, 사운드 시스템, 던전 시스템<br>
           <b style="color:var(--gold)">Ver.0.14</b> 몬스터 등장, 던전 입장권, 퀘스트 이름 수정<br>
           <b style="color:var(--gold)">Ver.0.13</b> 픽셀아트 캐릭터(Lv.1~9), 진화 연출, 응원 팝업<br>
           <b style="color:var(--gold)">Ver.0.12</b> 대시보드 레이아웃, 실행일지 달력, 자주쓰는 항목<br>
@@ -787,17 +813,31 @@ body.dungeon-mode .wrap::before{
 
 <script>
 const SAVE_KEY='goalquest_v5'; // 키 유지 - 기존 데이터 보존
-const CAT_META={
-  health: {label:'건강', color:'#ef4444', bg:'rgba(239,68,68,.12)',  icon:'❤️'},
-  mental: {label:'맨탈', color:'#a78bfa', bg:'rgba(167,139,250,.12)',icon:'🧠'},
-  family: {label:'관계', color:'#4ade80', bg:'rgba(74,222,128,.12)', icon:'🏠'},
-  finance:{label:'재정', color:'#facc15', bg:'rgba(250,204,21,.12)', icon:'💰'},
-  study:  {label:'학습', color:'#60a5fa', bg:'rgba(96,165,250,.12)', icon:'📚'},
-  work:   {label:'업무', color:'#94a3b8', bg:'rgba(148,163,184,.12)',icon:'💼'},
+// ALL available categories (pool for selection)
+const ALL_CATS_POOL={
+  health:  {label:'건강',  color:'#ef4444', bg:'rgba(239,68,68,.12)',   icon:'❤️',  desc:'운동, 식사, 수면, 물마시기 등'},
+  mental:  {label:'멘탈',  color:'#a78bfa', bg:'rgba(167,139,250,.12)', icon:'🧠',  desc:'명상, 긍정확언, 감사일기, 기도 등'},
+  family:  {label:'관계',  color:'#4ade80', bg:'rgba(74,222,128,.12)',  icon:'🤝',  desc:'가족, 친구와의 시간, 소통 등'},
+  finance: {label:'재정',  color:'#facc15', bg:'rgba(250,204,21,.12)',  icon:'💰',  desc:'저축, 투자, 가계부, 부업 등'},
+  study:   {label:'학습',  color:'#60a5fa', bg:'rgba(96,165,250,.12)',  icon:'📚',  desc:'독서, 공부, 강의, 코딩 등'},
+  work:    {label:'업무',  color:'#94a3b8', bg:'rgba(148,163,184,.12)', icon:'💼',  desc:'일일 목표, 프로젝트, 업무 루틴 등'},
+  creative:{label:'창작',  color:'#f97316', bg:'rgba(249,115,22,.12)',  icon:'🎨',  desc:'그림, 글쓰기, 음악, 취미 창작 등'},
 };
-const CAT_KEYS=Object.keys(CAT_META);
-const LEFT_CATS=['health','mental','family'];
-const RIGHT_CATS=['finance','study','work'];
+
+// Active categories (set by user during onboarding, or default all)
+let CAT_META={};
+let CAT_KEYS=[];
+let LEFT_CATS=[];
+let RIGHT_CATS=[];
+
+function initCatMeta(selectedKeys){
+  CAT_META={};
+  selectedKeys.forEach(k=>{if(ALL_CATS_POOL[k])CAT_META[k]=ALL_CATS_POOL[k];});
+  CAT_KEYS=Object.keys(CAT_META);
+  const half=Math.ceil(CAT_KEYS.length/2);
+  LEFT_CATS=CAT_KEYS.slice(0,half);
+  RIGHT_CATS=CAT_KEYS.slice(half);
+}
 
 const DEFAULT_QUESTS=[
   {id:1, cat:'health', name:'걷기 & 달리기',              lv:1,exp:0,logs:[],presets:[]},
@@ -815,7 +855,44 @@ const DEFAULT_QUESTS=[
   {id:13,cat:'work',   name:'일일 업무 목표 달성',        lv:1,exp:0,logs:[],presets:[]},
   {id:14,cat:'work',   name:'기타',                       lv:1,exp:0,logs:[],presets:[]},
 ];
-const DEFAULT_CATS={health:{lv:1,exp:0},mental:{lv:1,exp:0},family:{lv:1,exp:0},finance:{lv:1,exp:0},study:{lv:1,exp:0},work:{lv:1,exp:0}};
+function makeDefaultCats(keys){
+  const cats={};
+  keys.forEach(k=>cats[k]={lv:1,exp:0});
+  return cats;
+}
+function makeDefaultQuests(keys){
+  const questPool={
+    health:[
+      {name:'걷기 & 달리기'},{name:'근력운동'},{name:'스트레칭 & 기타'},{name:'물마시기 & 기타'}
+    ],
+    mental:[
+      {name:'명상 & 마음챙김'},{name:'기타'}
+    ],
+    family:[
+      {name:'가족과 적극적으로 시간보내기'},{name:'식사관련 & 기타'}
+    ],
+    finance:[
+      {name:'SOXL투자'},{name:'재정상황 정리 & 기타'}
+    ],
+    study:[
+      {name:'독서'},{name:'코딩 & 기타'}
+    ],
+    work:[
+      {name:'일일 업무 목표 달성'},{name:'기타'}
+    ],
+    creative:[
+      {name:'창작 활동'},{name:'기타'}
+    ],
+  };
+  let id=1;
+  const quests=[];
+  keys.forEach(k=>{
+    (questPool[k]||[{name:'기본 퀘스트'},{name:'기타'}]).forEach(q=>{
+      quests.push({id:id++,cat:k,name:q.name,lv:1,exp:0,logs:[],presets:[]});
+    });
+  });
+  return quests;
+}
 
 // EXP formula: lv*2
 function expForLv(lv){return lv>=100?999:lv*2;}
@@ -930,9 +1007,14 @@ function load(){
       return;
     }
   }catch(e){}
-  state={quests:JSON.parse(JSON.stringify(DEFAULT_QUESTS)),cats:JSON.parse(JSON.stringify(DEFAULT_CATS)),life:{lv:1,exp:0},collapsed:{},journal:{},dungeon:{}};
+  // Will be set after category selection
+  const defaultKeys=Object.keys(ALL_CATS_POOL);
+  initCatMeta(defaultKeys);
+  state={quests:makeDefaultQuests(defaultKeys),cats:makeDefaultCats(defaultKeys),life:{lv:1,exp:0},collapsed:{},journal:{},dungeon:{},selectedCats:defaultKeys};
   CAT_KEYS.forEach(k=>state.collapsed['q_'+k]=true);
 }
+
+function getActiveCats(){return CAT_KEYS.length>0?CAT_KEYS:Object.keys(ALL_CATS_POOL);}
 
 function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function dateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -957,6 +1039,64 @@ function showPage(name){
 function closeOnboard(){
   document.getElementById('onboardOverlay').classList.remove('open');
   localStorage.setItem('gq_onboard','done');
+}
+function goToCatSelect(){
+  document.getElementById('onboardOverlay').classList.remove('open');
+  document.getElementById('catSelectOverlay').style.display='flex';
+  renderCatSelectGrid();
+}
+let _selectedCats=[];
+function renderCatSelectGrid(){
+  const grid=document.getElementById('catSelectGrid');
+  grid.innerHTML=Object.entries(ALL_CATS_POOL).map(([key,meta])=>{
+    const sel=_selectedCats.includes(key);
+    return `<div class="cat-select-card${sel?' selected':''}"
+      style="${sel?`border-color:${meta.color};box-shadow:0 0 12px ${meta.color}44;background:${meta.bg};`:''}"
+      onclick="toggleCatSelect('${key}')">
+      <div class="cat-select-icon">${meta.icon}</div>
+      <div class="cat-select-name" style="${sel?`color:${meta.color};`:''}">${meta.label}</div>
+      <div class="cat-select-desc">${meta.desc}</div>
+    </div>`;
+  }).join('');
+  updateCatSelectCount();
+}
+function toggleCatSelect(key){
+  const idx=_selectedCats.indexOf(key);
+  if(idx>=0){
+    if(_selectedCats.length>3)_selectedCats.splice(idx,1);
+  } else {
+    if(_selectedCats.length<6)_selectedCats.push(key);
+  }
+  renderCatSelectGrid();
+}
+function updateCatSelectCount(){
+  const n=_selectedCats.length;
+  const countEl=document.getElementById('catSelectCount');
+  const btn=document.getElementById('catSelectBtn');
+  countEl.textContent=`${n}개 선택됨 (최소 3개, 최대 6개)`;
+  countEl.style.color=n>=3?'var(--gold)':'var(--text-dim)';
+  btn.disabled=n<3;
+  btn.style.opacity=n>=3?'1':'0.4';
+}
+function completeCatSelect(){
+  if(_selectedCats.length<3)return;
+  // Init state with selected cats - empty quests (user creates their own)
+  initCatMeta(_selectedCats);
+  state={
+    quests:[], // Empty - user will add their own
+    cats:makeDefaultCats(_selectedCats),
+    life:{lv:1,exp:0},
+    collapsed:{},
+    journal:{},
+    dungeon:{},
+    selectedCats:[..._selectedCats],
+    freshStart:true
+  };
+  CAT_KEYS.forEach(k=>state.collapsed['q_'+k]=false); // Open all for first time
+  save();
+  document.getElementById('catSelectOverlay').style.display='none';
+  localStorage.setItem('gq_onboard','done');
+  render();
 }
 
 // RENDER LIFE
@@ -1002,6 +1142,11 @@ function renderDashCats(){
 
 // RENDER QUESTS
 function renderQuests(){
+  // Show guide if fresh start with no quests
+  const totalQuests=state.quests.length;
+  const guideEl=document.getElementById('questGuide');
+  if(guideEl)guideEl.style.display=totalQuests===0?'block':'none';
+
   document.getElementById('questSections').innerHTML=CAT_KEYS.map(key=>{
     const meta=CAT_META[key];
     const quests=state.quests.filter(q=>q.cat===key);
@@ -1057,7 +1202,27 @@ function renderQuests(){
   }).join('');
 }
 
-function render(){renderLife();renderDashCats();renderQuests();renderDungeon();}
+function render(){renderLife();renderDashCats();renderQuests();renderDungeon();renderQuestGuide();}
+function renderQuestGuide(){
+  const el=document.getElementById('questGuideExamples');
+  if(!el)return;
+  const examples={
+    health:'걷기, 근력운동, 스트레칭, 물마시기',
+    mental:'명상, 긍정확언, 감사일기, 기도',
+    family:'가족과 대화, 함께 식사, 친구 연락',
+    finance:'가계부 작성, 투자 확인, 저축',
+    study:'독서, 강의, 코딩 공부',
+    work:'일일 목표 달성, 업무 정리',
+    creative:'그림 그리기, 글쓰기, 악기 연습',
+  };
+  el.innerHTML=CAT_KEYS.map(k=>{
+    const meta=CAT_META[k];
+    return `<div style="display:flex;gap:8px;align-items:center;font-size:12px;">
+      <span style="color:${meta.color};font-weight:800;">${meta.icon} ${meta.label}</span>
+      <span style="color:var(--text-dim);">→ ${examples[k]||'자유롭게 추가해보세요'}</span>
+    </div>`;
+  }).join('');
+}
 function toggleQuestCat(key){const k='q_'+key;state.collapsed[k]=!state.collapsed[k];save();renderQuests();}
 
 function addQuest(catKey){
@@ -1415,35 +1580,34 @@ function yesterdayDateKey(){
 
 // Check if all quests completed today → grant ticket
 function checkDungeonTicket(){
-  // Each category must have at least 1 quest done today
-  const allDone=CAT_KEYS.every(k=>state.quests.filter(q=>q.cat===k).some(q=>getTodayLogs(q).length>0));
-  const ticketEl=document.getElementById('dungeonTicket');
-  // Grant ticket for TOMORROW (works even in dungeon mode)
-  const tomorrowKey=(()=>{const d=new Date();d.setDate(d.getDate()+1);return dateKey(d);})();
-  if(allDone&&!state.dungeon?.ticketGrantedDate){
+  // Each category (that user selected) must have at least 1 quest done today
+  const activeCats=getActiveCats();
+  const allDone=activeCats.every(k=>state.quests.filter(q=>q.cat===k).some(q=>getTodayLogs(q).length>0));
+  const ticketEl=null; // removed
+  // ticketGrantedDate = today means "ticket earned today, dungeon available tomorrow"
+  // isDungeonActive checks ticketGrantedDate === yesterday
+  if(allDone&&state.dungeon?.ticketGrantedDate!==todayDateKey()){
     if(!state.dungeon)state.dungeon={};
-    state.dungeon.ticketGrantedDate=tomorrowKey;
-    ticketEl.style.display='block';
+    state.dungeon.ticketGrantedDate=todayDateKey();
+    state.dungeon.defeatedDate=null; // reset for tomorrow
+    state.dungeon.currentMonster=null;
+    if(ticketEl)ticketEl.style.display='block';
     playSound('ticket');
     save();
     setTimeout(showTicketPopup,300);
-  } else if(allDone&&(state.dungeon?.ticketGrantedDate===todayDateKey()||state.dungeon?.ticketGrantedDate===tomorrowKey)){
-    ticketEl.style.display='block';
+  } else if(allDone&&state.dungeon?.ticketGrantedDate===todayDateKey()){
+    if(ticketEl)ticketEl.style.display='block';
   } else {
-    ticketEl.style.display='none';
+    if(ticketEl)ticketEl.style.display='none';
   }
 }
 
 // Check if dungeon is active today
 function isDungeonActive(){
   if(!state.dungeon)return false;
-  // Ticket granted for today → dungeon active today
-  // (ticketGrantedDate stores the day the dungeon is ACTIVE, not when ticket was obtained)
-  const today=todayDateKey();
-  const yesterday=yesterdayDateKey();
-  // Support both old format (granted yesterday) and new format (granted for today)
+  // Ticket granted yesterday → dungeon active today
   const ticketDate=state.dungeon.ticketGrantedDate;
-  return (ticketDate===today||ticketDate===yesterday) && !state.dungeon.defeatedDate;
+  return ticketDate===yesterdayDateKey() && !state.dungeon.defeatedDate;
 }
 
 // Init dungeon for today
@@ -1499,9 +1663,7 @@ function renderDungeonProgress(){
   const doneCats=CAT_KEYS.filter(k=>state.quests.filter(q=>q.cat===k).some(q=>getTodayLogs(q).length>0));
   const remaining=CAT_KEYS.length-doneCats.length;
   const allDone=remaining===0;
-  const hasTicket=state.dungeon?.ticketGrantedDate&&
-    (state.dungeon.ticketGrantedDate===todayDateKey()||
-     state.dungeon.ticketGrantedDate===((()=>{const d=new Date();d.setDate(d.getDate()+1);return dateKey(d);})()));
+  const hasTicket=state.dungeon?.ticketGrantedDate===todayDateKey();
 
   if(isDungeonActive()){
     bar.style.background='linear-gradient(135deg,rgba(239,68,68,.15),rgba(180,30,10,.1))';
@@ -1604,6 +1766,7 @@ function closeMonsterAppear(){
 
 function showTicketPopup(){
   document.getElementById('ticketPopupOverlay').style.display='flex';
+  setTimeout(()=>closeTicketPopup(),3000);
 }
 function closeTicketPopup(){
   document.getElementById('ticketPopupOverlay').style.display='none';
@@ -1850,7 +2013,10 @@ function executeReset(){
 
 load();checkPenalty();render();initSoundIcon();
 // Show onboarding for first time users
-if(!localStorage.getItem('gq_onboard'))document.getElementById('onboardOverlay').classList.add('open');
+if(!localStorage.getItem('gq_onboard')){
+  document.getElementById('onboardOverlay').classList.add('open');
+  _selectedCats=[]; // Start empty
+}
 </script>
 </body>
 </html>
