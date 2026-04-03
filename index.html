@@ -699,7 +699,7 @@ body.dungeon-mode .wrap::before{
     <div style="font-size:11px;color:rgba(255,255,255,.3);animation:blink 1.5s infinite;">탭하면 계속</div>
   </div>
 </div>
-@keyframes monster-appear-in in CSS
+
 
 <!-- TICKET POPUP -->
 <div class="exp-react-overlay" id="ticketPopupOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);z-index:195;justify-content:center;align-items:center;" onclick="closeTicketPopup()">
@@ -812,7 +812,7 @@ body.dungeon-mode .wrap::before{
 </div>
 
 <script>
-const SAVE_KEY='goalquest_v5'; // 키 유지 - 기존 데이터 보존
+const SAVE_KEY='goalquest_v18'; // 키 유지 - 기존 데이터 보존
 // ALL available categories (pool for selection)
 const ALL_CATS_POOL={
   health:  {label:'건강',  color:'#ef4444', bg:'rgba(239,68,68,.12)',   icon:'❤️',  desc:'운동, 식사, 수면, 물마시기 등'},
@@ -988,11 +988,18 @@ function load(){
     const r=localStorage.getItem(SAVE_KEY);
     if(r){
       state=JSON.parse(r);
-      state.quests.forEach(q=>{if(!q.presets)q.presets=[];if(!q.logs)q.logs=[];});
+      // ── initCatMeta FIRST using saved selectedCats ──
+      const savedCats=state.selectedCats||Object.keys(ALL_CATS_POOL);
+      initCatMeta(savedCats.length>=3?savedCats:Object.keys(ALL_CATS_POOL));
+      // ── Safety checks ──
+      if(!state.quests)state.quests=[];
+      if(!state.cats)state.cats={};
       if(!state.journal)state.journal={};
       if(!state.dungeon)state.dungeon={};
-      if(!state.cats.mental)state.cats.mental={lv:1,exp:0};
-      // Migrate logs → journal
+      if(!state.life)state.life={lv:1,exp:0};
+      if(!state.collapsed)state.collapsed={};
+      state.quests.forEach(q=>{if(!q.presets)q.presets=[];if(!q.logs)q.logs=[];});
+      // ── Migrate logs → journal ──
       state.quests.forEach(q=>{
         (q.logs||[]).forEach(l=>{
           if(!state.journal[l.date])state.journal[l.date]=[];
@@ -1000,18 +1007,18 @@ function load(){
           if(!already)state.journal[l.date].push({cat:q.cat,questName:q.name,exp:l.exp,memo:l.memo});
         });
       });
-      CAT_KEYS.forEach(k=>{if(state.collapsed['q_'+k]===undefined)state.collapsed['q_'+k]=true;});
-      // Cap exp to prevent bar overflow (old data migration)
-      state.quests.forEach(q=>{if(q.exp>=expForLv(q.lv))q.exp=expForLv(q.lv)-1;});
-      CAT_KEYS.forEach(k=>{const cat=state.cats[k];if(cat.exp>=expForLv(cat.lv))cat.exp=expForLv(cat.lv)-1;});
+      // ── Collapsed defaults ──
+      CAT_KEYS.forEach(k=>{if(state.collapsed['q_'+k]===undefined)state.collapsed['q_'+k]=false;});
+      // ── Cap exp ──
+      state.quests.forEach(q=>{if(q.exp>=expForLv(q.lv))q.exp=Math.max(0,expForLv(q.lv)-1);});
+      CAT_KEYS.forEach(k=>{if(state.cats[k]){const cat=state.cats[k];if(cat.exp>=expForLv(cat.lv))cat.exp=Math.max(0,expForLv(cat.lv)-1);}});
       return;
     }
-  }catch(e){}
-  // Will be set after category selection
+  }catch(e){console.error('Load error:',e);}
+  // No saved data → wait for category selection
   const defaultKeys=Object.keys(ALL_CATS_POOL);
   initCatMeta(defaultKeys);
-  state={quests:makeDefaultQuests(defaultKeys),cats:makeDefaultCats(defaultKeys),life:{lv:1,exp:0},collapsed:{},journal:{},dungeon:{},selectedCats:defaultKeys};
-  CAT_KEYS.forEach(k=>state.collapsed['q_'+k]=true);
+  state={quests:[],cats:makeDefaultCats(defaultKeys),life:{lv:1,exp:0},collapsed:{},journal:{},dungeon:{},selectedCats:[]};
 }
 
 function getActiveCats(){return CAT_KEYS.length>0?CAT_KEYS:Object.keys(ALL_CATS_POOL);}
@@ -1021,7 +1028,7 @@ function dateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2
 function getTodayLog(q){return q.logs.find(l=>l.date===todayStr())||null;}
 function getTodayLogs(q){return q.logs.filter(l=>l.date===todayStr());}
 function catQuestsDoneToday(catKey){
-  const qs=state.quests.filter(q=>q.cat===catKey);
+  const qs=(state.quests||[]).filter(q=>q.cat===catKey);
   const done=qs.filter(q=>getTodayLogs(q).length>0).length;
   return{total:qs.length,done};
 }
@@ -1080,19 +1087,18 @@ function updateCatSelectCount(){
 }
 function completeCatSelect(){
   if(_selectedCats.length<3)return;
-  // Init state with selected cats - empty quests (user creates their own)
+  // Always fresh start with selected categories
   initCatMeta(_selectedCats);
   state={
-    quests:[], // Empty - user will add their own
+    quests:[], // Always empty - user adds their own
     cats:makeDefaultCats(_selectedCats),
     life:{lv:1,exp:0},
     collapsed:{},
     journal:{},
     dungeon:{},
     selectedCats:[..._selectedCats],
-    freshStart:true
   };
-  CAT_KEYS.forEach(k=>state.collapsed['q_'+k]=false); // Open all for first time
+  CAT_KEYS.forEach(k=>state.collapsed['q_'+k]=false);
   save();
   document.getElementById('catSelectOverlay').style.display='none';
   localStorage.setItem('gq_onboard','done');
@@ -1126,7 +1132,7 @@ function renderDashCats(){
       if(allDone) cardStyle=`background:${meta.bg.replace('.12','.22')};box-shadow:0 0 16px ${meta.color}66;border-color:${meta.color};`;
       else if(anyDone) cardStyle=`border-color:${meta.color}99;box-shadow:0 0 8px ${meta.color}33;`;
       const swordSVG=(filled,color)=>`<div class="quest-dot${filled?' done':''}"><svg viewBox="0 0 14 14" width="14" height="14" xmlns="http://www.w3.org/2000/svg"><path d="M7 1 L9 5 L13 6 L9 8 L10 13 L7 10 L4 13 L5 8 L1 6 L5 5 Z" fill="${color}" opacity="${filled?1:0.2}"/></svg></div>`;
-      const dots=Array.from({length:total},(_,i)=>swordSVG(i<done,meta.color)).join('');
+      const dots=total>0?Array.from({length:total},(_,i)=>swordSVG(i<done,meta.color)).join(''):`<div style="font-size:10px;color:${meta.color}44;">퀘스트 없음</div>`;
       return `<div class="cat-mini-card${allDone?' full-done':anyDone?' partial':''}" style="${cardStyle}">
         <div class="cat-mini-top">
           <div class="cat-mini-dot" style="background:${meta.color}"></div>
@@ -1142,10 +1148,10 @@ function renderDashCats(){
 
 // RENDER QUESTS
 function renderQuests(){
-  // Show guide if fresh start with no quests
-  const totalQuests=state.quests.length;
+  // Show guide if no quests yet
+  const totalQuests=(state.quests||[]).length;
   const guideEl=document.getElementById('questGuide');
-  if(guideEl)guideEl.style.display=totalQuests===0?'block':'none';
+  if(guideEl)guideEl.style.display=totalQuests===0&&CAT_KEYS.length>0?'block':'none';
 
   document.getElementById('questSections').innerHTML=CAT_KEYS.map(key=>{
     const meta=CAT_META[key];
@@ -1582,7 +1588,7 @@ function yesterdayDateKey(){
 function checkDungeonTicket(){
   // Each category (that user selected) must have at least 1 quest done today
   const activeCats=getActiveCats();
-  const allDone=activeCats.every(k=>state.quests.filter(q=>q.cat===k).some(q=>getTodayLogs(q).length>0));
+  const allDone=(state.quests||[]).length>0&&activeCats.every(k=>(state.quests||[]).filter(q=>q.cat===k).some(q=>getTodayLogs(q).length>0));
   const ticketEl=null; // removed
   // ticketGrantedDate = today means "ticket earned today, dungeon available tomorrow"
   // isDungeonActive checks ticketGrantedDate === yesterday
@@ -1660,7 +1666,7 @@ function renderDungeon(){
 function renderDungeonProgress(){
   const bar=document.getElementById('dungeonProgressBar');
   if(!bar)return;
-  const doneCats=CAT_KEYS.filter(k=>state.quests.filter(q=>q.cat===k).some(q=>getTodayLogs(q).length>0));
+  const doneCats=CAT_KEYS.filter(k=>(state.quests||[]).filter(q=>q.cat===k).some(q=>getTodayLogs(q).length>0));
   const remaining=CAT_KEYS.length-doneCats.length;
   const allDone=remaining===0;
   const hasTicket=state.dungeon?.ticketGrantedDate===todayDateKey();
